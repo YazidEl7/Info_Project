@@ -3,7 +3,7 @@ import time
 import os
 
 
-def changeable_info():
+def info():
     #   Exist(1) send username, ip and status
     mylist = []
     username = {"username": os.getlogin()}
@@ -15,11 +15,6 @@ def changeable_info():
     #   Sending status 1 to update IP status to UP
     status = {"status": 1}
     mylist.append(status)
-    return mylist
-
-
-def unchangeable_info(mylist):
-    #   Doesn't exist (2) send the above plus bios serial
     command = "wmic bios get serialnumber"
     bios_ser = os.popen(command).read().replace("\n", "").replace("SerialNumber  ", "").replace("      ", "")
     bios_ser = {"bios_serial": bios_ser}
@@ -36,7 +31,7 @@ def send(msg):
     client.send(message)
 
 
-def receive():
+'''def receive():
     state = ''
     connected = True
     while connected:
@@ -49,7 +44,7 @@ def receive():
                 #   changing state to int, because the only thing the server sends is an int
                 state = int(state.replace(EOF_MESSAGE, ''))
                 connected = False
-    return state
+    return state '''
 
 
 HEADER = 64
@@ -83,25 +78,11 @@ while True:
             send(os.environ['COMPUTERNAME'])
             #   After every sg we are required to send EOF_MESSAGE, so that server on receive could break out of loop
             send(EOF_MESSAGE)
-            #   next we wait to receive existence in db status, 1\2.
-            Existence_Status = receive()
-            # Next print is just for test sk, l8r we try to make the program run silently (In hidden window)
-            print(Existence_Status)
             # the data we'll send is a list of dictionaries
             List_to_Send = []
-            if Existence_Status == 1:
-                #   Exist send username, domain, ip and status
-                List_to_Send = changeable_info()
-            elif Existence_Status == 2:
-                #   Doesn't exist send the above plus bios serial
-                List_to_Send = changeable_info()
-                List_to_Send = unchangeable_info(List_to_Send)
-            else:
-                # Failed receive break out of loop
-                Connection_Status = 0
-                break
             try:
                 # Sending the List
+                List_to_Send = info()
                 send(str(List_to_Send))
                 send(EOF_MESSAGE)
             except:

@@ -3,7 +3,7 @@ import time
 import threading
 from db_init_connection import db_init, db_insert, db_update, checkdb
 from Client_Class import Info
-from Sender_Receiver import send, receive_info, receive_name
+from Sender_Receiver import receive_info, receive_name
 HEADER = 64
 PORT = 8888
 SERVER = "127.0.0.1"
@@ -23,32 +23,26 @@ def handle_client(conn, addr):
     received_name = receive_name(conn)
     print(f"[{addr}] {received_name}")
     # checking the db whether the computer name exists
-    existence_status = checkdb(received_name)
-    # Sending existence status 1\2
-    send(conn, str(existence_status))
-    send(conn, EOF_MESSAGE)
+    existence_status, row_id = checkdb(received_name)
+    print(f"ROW ID : [{row_id}] {received_name}")
     # receiving the list of data
     received_data = receive_info(conn)
     # printing for test sk,
     print(received_data)
     # Instantiating the class now for test reasons
     client_instance = Info(received_name)
+    client_instance.setinfo(received_data)
     if existence_status == 1:
-        # Call fun to obj
-        client_instance.setinfo1(received_data)
         # Updating data
-        db_update(client_instance)
+        db_update(client_instance, row_id)
         # printing for test sk,
         print('status 1')
 
-    elif existence_status == 2:
-        # Call fun to obj + bios serial
-        client_instance.setinfo1(received_data)
-        client_instance.setinfo2(received_data[4])
+    elif existence_status == 0:
         # Inserting data
         db_insert(client_instance)
         # printing for test sk,
-        print('status 2')
+        print('status 0')
 
     conn.close()
 

@@ -10,14 +10,12 @@ class Info:
 
         # Adds an instance variable
 
-    def setinfo1(self, infodata):
+    def setinfo(self, infodata):
         self.username = infodata[0]["username"]
         self.domain = infodata[1]["domain"]
         self.adress = infodata[2]["IP"]
         self.status = infodata[3]["status"]
-
-    def setinfo2(self, infodata):
-        self.biosserial = infodata["bios_serial"]
+        self.biosserial = infodata[4]["bios_serial"]
 
     # Retrieves instance variable
     def getbios(self):
