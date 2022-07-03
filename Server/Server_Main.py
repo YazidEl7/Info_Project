@@ -1,7 +1,9 @@
 import socket
+import time
 import threading
-from db_init_connection import db_init, db_conn, db_close_conn
-
+from db_init_connection import db_init, db_insert, db_update, checkdb
+from Client_Class import Info
+from Sender_Receiver import send, receive_info, receive_name
 HEADER = 64
 PORT = 8888
 SERVER = "127.0.0.1"
@@ -17,68 +19,11 @@ server.bind(ADDR)
 def handle_client(conn, addr):
     print(f"[NEW CONNECTION] {addr} connected.")
 
-    def send(conn, mesg):
-        state = mesg.encode(FORMAT)
-        state_length = len(state)
-        send_length = str(state_length).encode(FORMAT)
-        send_length += b' ' * (HEADER - len(send_length))
-        conn.send(send_length)
-        conn.send(state)
-
-    #
-
-    def receive_name(conn):
-        msgg = ''
-        connected = True
-        while connected:
-            msg_length = conn.recv(HEADER).decode(FORMAT)
-            if msg_length:
-                msg_length = int(msg_length)
-                msg = conn.recv(msg_length).decode(FORMAT)
-                msgg += msg
-                if msg == EOF_MESSAGE:
-                    msgg = msgg.replace(EOF_MESSAGE, '')
-                    connected = False
-        return msgg
-
-    #
-    def receive_info(conn):
-        msgg = ''
-        connected = True
-        while connected:
-            msg_length = conn.recv(HEADER).decode(FORMAT)
-            if msg_length:
-                msg_length = int(msg_length)
-                msg = conn.recv(msg_length).decode(FORMAT)
-                msgg += msg
-                if msg == EOF_MESSAGE:
-                    msgg = eval(msgg.replace(EOF_MESSAGE, ''))
-                    connected = False
-        return msgg
-
-    #
-    def checkdb(cur, received_name):
-        # checking whether the computer is already registered
-        namecheck = ''
-        existence_status = 2
-        try:
-            cur.execute("SELECT Comp_Name FROM Computers WHERE Comp_Name = ?", (received_name,))
-            row = cur.fetchone()
-            namecheck = row[0]
-            if received_name == namecheck:
-                existence_status = 1
-        except:
-            existence_status = 2
-        return existence_status
-
-    #
     # receiving computer name
     received_name = receive_name(conn)
     print(f"[{addr}] {received_name}")
-    # Connecting to DataBase
-    cur, con_n = db_conn()
     # checking the db whether the computer name exists
-    existence_status = checkdb(cur, received_name)
+    existence_status = checkdb(received_name)
     # Sending existence status 1\2
     send(conn, str(existence_status))
     send(conn, EOF_MESSAGE)
@@ -86,24 +31,32 @@ def handle_client(conn, addr):
     received_data = receive_info(conn)
     # printing for test sk,
     print(received_data)
+    # Instantiating the class now for test reasons
+    client_instance = Info(received_name)
     if existence_status == 1:
         # Call fun to obj
+        client_instance.setinfo1(received_data)
+        # Updating data
+        db_update(client_instance)
         # printing for test sk,
         print('status 1')
 
     elif existence_status == 2:
         # Call fun to obj + bios serial
+        client_instance.setinfo1(received_data)
+        client_instance.setinfo2(received_data[4])
+        # Inserting data
+        db_insert(client_instance)
         # printing for test sk,
         print('status 2')
 
-    # Closing Connection to DataBase
-    db_close_conn(con_n)
     conn.close()
 
 
 def start():
     # Creating Database and its Tables
     db_init()
+    time.sleep(2)
     server.listen()
     print(f"[LISTENING] Server is listening on {SERVER}")
     while True:

@@ -10,6 +10,8 @@ def changeable_info():
     mylist.append(username)
     domain = {"domain": os.environ['userdomain']}
     mylist.append(domain)
+    ip = {"IP": str(socket.gethostbyname(socket.gethostname()))}
+    mylist.append(ip)
     #   Sending status 1 to update IP status to UP
     status = {"status": 1}
     mylist.append(status)
@@ -88,7 +90,7 @@ while True:
             # the data we'll send is a list of dictionaries
             List_to_Send = []
             if Existence_Status == 1:
-                #   Exist send username, ip and status
+                #   Exist send username, domain, ip and status
                 List_to_Send = changeable_info()
             elif Existence_Status == 2:
                 #   Doesn't exist send the above plus bios serial

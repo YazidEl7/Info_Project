@@ -1,5 +1,6 @@
 import sqlite3
 
+
 # database name : comp-info.sqlite, contains 4 tables
 # Tables : IPees, Computers, Users, Info
 # IPees fields : IP, Status(up\down)
@@ -33,11 +34,65 @@ def db_init():
 
 
 def db_conn():
-    con_n = sqlite3.connect('comp-info.sqlite')
-    cur = con_n.cursor()
-    return cur, con_n
+    conn_db = sqlite3.connect('comp-info.sqlite')
+    curse = conn_db.cursor()
+    return curse, conn_db
 
 
-def db_close_conn(con_n):
-    con_n.close()
+def db_close_conn(conn_db):
+    conn_db.close()
 
+    #
+
+
+def checkdb(received_name):
+    # Connecting to DataBase
+    curse, conn_db = db_conn()
+    # checking whether the computer is already registered
+    namecheck = ''
+    existence_status = 2
+    try:
+        curse.execute("SELECT Comp_Name FROM Computers WHERE Comp_Name = ?", (received_name,))
+        row = curse.fetchone()
+        namecheck = row[0]
+        if received_name == namecheck:
+            existence_status = 1
+    except:
+        existence_status = 2
+    # Closing Connection to DataBase
+    db_close_conn(conn_db)
+    return existence_status
+
+    #
+
+
+def db_insert(client_instance):
+    # Connecting to DataBase
+    curse, conn_db = db_conn()
+    # not registered before 2
+    #   inserting data
+    curse.execute(''' INSERT INTO Computers(BIOS_Serial,Comp_Name) VALUES(?,?) ''',
+                  (client_instance.biosserial, client_instance.computername))
+    conn_db.commit()
+    comp_id = curse.lastrowid
+    curse.execute(''' INSERT INTO Users(User,Domain) VALUES(?,?) ''',
+                  (client_instance.username, client_instance.domain))
+    conn_db.commit()
+    user_id = curse.lastrowid
+    curse.execute(''' INSERT INTO IPees(IP,Status) VALUES(?,?) ''', (client_instance.adress, client_instance.status))
+    conn_db.commit()
+    ip_id = curse.lastrowid
+    curse.execute(''' INSERT INTO Info(Comp_Id,User_Id,IP_Id,Status_Id) VALUES(?,?,?,?) ''',
+                  (comp_id, user_id, ip_id, ip_id))
+    conn_db.commit()
+    # Closing Connection to DataBase
+    db_close_conn(conn_db)
+
+
+def db_update(client_instance):
+    # Connecting to DataBase
+    curse, conn_db = db_conn()
+    # Updating data
+
+    # Closing Connection to DataBase
+    db_close_conn(conn_db)
