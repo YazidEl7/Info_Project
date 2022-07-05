@@ -17,7 +17,7 @@ def db_init():
     (Id INTEGER NOT NULL, IP Text, Status INTEGER, UNIQUE(Id,IP), PRIMARY KEY("Id" AUTOINCREMENT))''')
     cur.execute('''
     CREATE TABLE IF NOT EXISTS Computers
-    (Id INTEGER NOT NULL, BIOS_Serial TEXT, Comp_Name TEXT, UNIQUE(Id,BIOS_Serial), 
+    (Id INTEGER NOT NULL, BIOS_Serial TEXT, Comp_Name TEXT, UNIQUE(Id,BIOS_Serial,Comp_Name), 
     PRIMARY KEY("Id" AUTOINCREMENT))''')
     cur.execute('''
     CREATE TABLE IF NOT EXISTS Users
@@ -26,7 +26,7 @@ def db_init():
     CREATE TABLE IF NOT EXISTS Info
     (Id INTEGER NOT NULL UNIQUE, Comp_Id INTEGER UNIQUE, User_Id INTEGER, IP_Id INTEGER, Status_Id INTEGER, 
     PRIMARY KEY("Id" AUTOINCREMENT), 
-    FOREIGN KEY("Comp_Id") REFERENCES Computers (Id), 
+    FOREIGN KEY("Comp_Id") REFERENCES Computers (Id) ON DELETE CASCADE, 
     FOREIGN KEY("User_Id") REFERENCES Users (Id), 
     FOREIGN KEY("IP_Id") REFERENCES IPees (Id), 
     FOREIGN KEY("Status_Id") REFERENCES IPees (Id))''')
@@ -51,19 +51,17 @@ def checkdb(received_name):
     # checking whether the computer is already registered
     namecheck = ''
     existence_status = 0
-    row_id = 0
     try:
-        curse.execute("SELECT Id,Comp_Name FROM Computers WHERE Comp_Name = ?", (received_name,))
+        curse.execute("SELECT Comp_Name FROM Computers WHERE Comp_Name = ?", (received_name,))
         row = curse.fetchone()
-        row_id = row[0]
-        namecheck = row[1]
+        namecheck = row[0]
         if received_name == namecheck:
             existence_status = 1
     except:
         existence_status = 0
     # Closing Connection to DataBase
     db_close_conn(conn_db)
-    return existence_status, row_id
+    return existence_status
 
     #
 
@@ -81,12 +79,13 @@ def db_insert(client_instance):
                   (client_instance.username, client_instance.domain))
     conn_db.commit()
     user_id = curse.lastrowid
-    curse.execute(''' INSERT INTO IPees(IP,Status) VALUES(?,?) ''', (client_instance.adress, client_instance.status))
+    curse.execute(''' INSERT INTO IPees(IP,Status) VALUES(?,?) ''', (client_instance.address, client_instance.status))
     conn_db.commit()
     ip_id = curse.lastrowid
     curse.execute(''' INSERT INTO Info(Comp_Id,User_Id,IP_Id,Status_Id) VALUES(?,?,?,?) ''',
                   (comp_id, user_id, ip_id, ip_id))
     conn_db.commit()
+    print(user_id)
     # Closing Connection to DataBase
     db_close_conn(conn_db)
 
@@ -99,7 +98,7 @@ def db_search(to_be_searched, choice):
     found = 0
     try:
         if choice == 1:
-            curse.execute('''SELECT BIOS_Serial FROM Computers WHERE Id = ?''', (to_be_searched,))
+            curse.execute('''SELECT Id FROM Computers WHERE BIOS_Serial = ?''', (to_be_searched,))
         elif choice == 2:
             curse.execute('''SELECT Id FROM IPees WHERE IP = ?''', (to_be_searched,))
         elif choice == 3:
@@ -116,40 +115,41 @@ def db_search(to_be_searched, choice):
     return found, check
 
 
-def db_update(client_instance, computerid):
+def db_update(client_instance):
     # Connecting to DataBase
     curse, conn_db = db_conn()
 
-    f1, c1 = db_search(computerid, 1)
-    if c1 != client_instance.biosserial:
+    f1, c1 = db_search(client_instance.biosserial, 1)
+    print(f"c1 : {c1} {type(c1)}, bios {client_instance.biosserial} {type(client_instance.biosserial)}")
+    if len(str(c1)) < 1:
         curse.execute(''' INSERT INTO Computers(BIOS_Serial,Comp_Name) VALUES(?,?) ''',
                       (client_instance.biosserial, client_instance.computername))
         conn_db.commit()
-        computerid = curse.lastrowid
+        c1 = curse.lastrowid
 
     f2, c2 = db_search(client_instance.address, 2)
-    if len(c2) >= 1:
+    if len(str(c2)) >= 1:
         curse.execute('''Update IPees set Status = 1 where id = ?''', (c2,))
     else:
         curse.execute(''' INSERT INTO IPees(IP,Status) VALUES(?,?) ''',
-                      (client_instance.adress, client_instance.status))
+                      (client_instance.address, client_instance.status))
         conn_db.commit()
         c2 = curse.lastrowid
 
     f3, c3 = db_search(client_instance.username, 3)
-    if len(c3) < 1:
+    if len(str(c3)) < 1:
         curse.execute(''' INSERT INTO Users(User,Domain) VALUES(?,?) ''',
                       (client_instance.username, client_instance.domain))
         conn_db.commit()
         c3 = curse.lastrowid
 
-    f4, c4 = db_search(computerid, 4)
-    if len(c4) >= 1:
-        curse.execute('''Update Info set Comp_Id = ?, User_Id = ?, IP_Id = ?, Status = ? where id = ?''',
-                      (computerid, c3, c2, c2, c4))
+    f4, c4 = db_search(c1, 4)
+    if len(str(c4)) >= 1:
+        curse.execute('''Update Info set Comp_Id = ?, User_Id = ?, IP_Id = ?, Status_Id = ? where id = ?''',
+                      (c1, c3, c2, c2, c4))
     else:
-        curse.execute(''' INSERT INTO Info(Comp_Id,User_Id,IP_Id,Status) VALUES(?,?,?,?) ''',
-                      (computerid, c3, c2, c2, c4))
+        curse.execute(''' INSERT INTO Info(Comp_Id,User_Id,IP_Id,Status_Id) VALUES(?,?,?,?) ''',
+                      (c1, c3, c2, c2))
         conn_db.commit()
         info_id = curse.lastrowid
 

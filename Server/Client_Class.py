@@ -13,7 +13,7 @@ class Info:
     def setinfo(self, infodata):
         self.username = infodata[0]["username"]
         self.domain = infodata[1]["domain"]
-        self.adress = infodata[2]["IP"]
+        self.address = infodata[2]["IP"]
         self.status = infodata[3]["status"]
         self.biosserial = infodata[4]["bios_serial"]
 

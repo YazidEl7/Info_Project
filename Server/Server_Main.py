@@ -23,8 +23,8 @@ def handle_client(conn, addr):
     received_name = receive_name(conn)
     print(f"[{addr}] {received_name}")
     # checking the db whether the computer name exists
-    existence_status, row_id = checkdb(received_name)
-    print(f"ROW ID : [{row_id}] {received_name}")
+    existence_status = checkdb(received_name)
+
     # receiving the list of data
     received_data = receive_info(conn)
     # printing for test sk,
@@ -33,8 +33,9 @@ def handle_client(conn, addr):
     client_instance = Info(received_name)
     client_instance.setinfo(received_data)
     if existence_status == 1:
+        print(f"{received_name}")
         # Updating data
-        db_update(client_instance, row_id)
+        db_update(client_instance)
         # printing for test sk,
         print('status 1')
 
