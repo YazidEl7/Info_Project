@@ -1,0 +1,11 @@
+{% extends "HelpInfo/index.html" %}
+
+{% block content %}
+<p>Extending works</p>
+
+<p>
+    {% for i in Computers %}
+    {{i.comp.comp_name}} {{i.user.user}} {{i.status.status}} {{i.ip.ip}} <br>
+    {% endfor %}
+</p>
+{% endblock %}

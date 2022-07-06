@@ -1,0 +1,10 @@
+header {
+  display: block;
+  background-color:#67ff58;
+  font-family: 'Quicksand';
+  font-size: 22px;
+  padding: 25px 50px;
+  margin-top: -10px;
+  margin-right: -10px;
+  margin-left: -10px
+}
