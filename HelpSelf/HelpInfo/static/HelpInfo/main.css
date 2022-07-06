@@ -1,11 +1,13 @@
 header {
   display: block;
   background-color:#67ff58;
-  font-family: 'Quicksand';
-  font-size: 22px;
-  padding: 25px 50px;
+  font-family: 'Chela One';
+  font-size: 36px;
+  max-height: fit-content;
+  padding: 20px;
   text-align: center;
   border-radius: 25px;
+  color: #f2f2f2;
 }
 table {
   border-collapse: collapse;
