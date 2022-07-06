@@ -4,7 +4,19 @@ header {
   font-family: 'Quicksand';
   font-size: 22px;
   padding: 25px 50px;
-  margin-top: -10px;
-  margin-right: -10px;
-  margin-left: -10px
+  text-align: center;
+  border-radius: 25px;
 }
+table {
+  border-collapse: collapse;
+  width: 97%;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+th, td {
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {background-color: #f2f2f2;}
