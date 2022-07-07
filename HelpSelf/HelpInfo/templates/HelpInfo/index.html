@@ -11,8 +11,15 @@
     <header>
         <h1>info</h1>
     </header>
+    <hr class="new1">
+     <div class="btn-group">
+        <button onclick="window.location.href = '/Home';">Computers</button>
+        <button onclick="window.location.href = '/Logs';">Logs</button>
+        <button onclick="window.location.href = '/Users_History';">Users Login History</button>
+     </div>
+    <hr class="new2">
     <div>
-        {% block content %}{% endblock %}
+        {% block header %}{% endblock %}
     </div>
 </body>
 </html>

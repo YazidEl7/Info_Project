@@ -1,24 +1,65 @@
+body {
+    background-color: #FFFFF0;
+}
 header {
   display: block;
   background-color:#67ff58;
   font-family: 'Chela One';
   font-size: 36px;
   max-height: fit-content;
-  padding: 20px;
+  padding: 0px;
+  margin-top: -30px;
   text-align: center;
   border-radius: 25px;
   color: #f2f2f2;
 }
+
+hr.new1 {
+  border: 1px solid #98fb98;
+}
+hr.new2 {
+  border: 1px solid #98fb98;
+}
 table {
-  border-collapse: collapse;
+  border-radius: 10px;
+  /* border-collapse: collapse; */
   width: 97%;
   margin-left: 20px;
   margin-right: 20px;
+  border: 2px solid #98fb98;
 }
-
 th, td {
   text-align: left;
   padding: 8px;
 }
+tr:nth-child(even) {background-color: #F0FFFF;}
 
-tr:nth-child(even) {background-color: #f2f2f2;}
+.btn-group button {
+  background-color: #F0FFFF;
+  border: 1px solid #98fb98; /* Green border */
+  border-radius: 10px;
+  color: black; /* black text */
+  padding: 10px 34px; /* Some padding */
+  cursor: pointer; /* Pointer/hand icon */
+  float: left; /* Float the buttons side by side */
+}
+.btn-group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn-group button:not(:last-child) {
+  border-right: none;  /*Prevent double borders*/
+}
+/* Clear floats (clearfix hack) */
+.btn-group:after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+/* Add a background color on hover */
+.btn-group button:hover {
+  background-color: #98fb98;
+}

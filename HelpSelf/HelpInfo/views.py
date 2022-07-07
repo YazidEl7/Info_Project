@@ -16,3 +16,11 @@ def data(request):
     output = '<br>'.join([f"{i.comp.comp_name} {i.user.user} {i.status.status} {i.ip.ip}" for i in information])
     output1 = {'Computers': information}
     return render(request, 'HelpInfo/data.html', output1)
+
+
+def logs(request):
+    return render(request, 'HelpInfo/logs.html')
+
+
+def users_history(request):
+    return render(request, 'HelpInfo/users_history.html')
