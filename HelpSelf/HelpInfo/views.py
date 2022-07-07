@@ -2,13 +2,12 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Info
 from django.utils.html import escape
+from django.http import HttpResponseRedirect
 
 
 # Create your views here.
-
-
-def index(request):
-    return render(request, 'HelpInfo/index.html')
+def login(request):
+    return HttpResponseRedirect('/login/')
 
 
 def data(request):

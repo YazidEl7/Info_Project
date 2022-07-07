@@ -63,3 +63,18 @@ tr:nth-child(even) {background-color: #F0FFFF;}
 .btn-group button:hover {
   background-color: #98fb98;
 }
+.Out {
+  display: flex;
+  justify-content: right;
+}
+.Out button {
+  background-color: #F0FFFF;
+  border: 1px solid #98fb98; /* Green border */
+  border-radius: 10px;
+  color: black; /* black text */
+  padding: 10px 34px; /* Some padding */
+  cursor: pointer; /* Pointer/hand icon */
+}
+.Out button:hover {
+  background-color: #98fb98;
+}

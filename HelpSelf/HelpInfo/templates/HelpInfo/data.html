@@ -1,15 +1,26 @@
 {% extends "HelpInfo/index.html" %}
 
-{% block header %}
-<div style="overflow-x: auto;">
-  <table>
-    <tr>
-      <th>Computer Name</th>
-      <th>User Name</th>
-      <th>Status</th>
-      <th>IP</th>
-    </tr>
-      {% for i in Computers %}
+{% block content %}
+    {% if user.is_authenticated %}
+        <div class="Out" >
+            <button onclick="window.location.href = {% url 'logout' %};">User : {{ user.username }} | Log Out</button>
+        </div>
+        <hr class="new1">
+     <div class="btn-group">
+        <button onclick="window.location.href = '/Home';">Computers</button>
+        <button onclick="window.location.href = '/Logs';">Logs</button>
+        <button onclick="window.location.href = '/Users_History';">Users Login History</button>
+     </div>
+    <hr class="new2">
+    <div style="overflow-x: auto;">
+    <table>
+        <tr>
+            <th>Computer Name</th>
+            <th>User Name</th>
+            <th>Status</th>
+            <th>IP</th>
+         </tr>
+            {% for i in Computers %}
          <tr>
             <td>{{i.comp.comp_name}}</td>
             <td>{{i.user.user}}</td>
@@ -20,10 +31,14 @@
                 {% endif %}
             <td>{{i.ip.ip}}</td>
          </tr>
-      {% endfor %}
-  </table>
+            {% endfor %}
+     </table>
 
-</div>
+    </div>
+    {% else %}
+            <p> You are not logged in </p>
+            <a href="{% url 'login' %}">Log In</a>
+    {% endif %}
 {% endblock %}
 
 
