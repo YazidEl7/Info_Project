@@ -1,6 +1,7 @@
 {% extends "HelpInfo/index.html" %}
 
 {% block content %}
+    {% if not user.is_authenticated %}
     <h2 class="login-title">Log In</h2>
         <form method="post">
             {% csrf_token %}
@@ -15,9 +16,10 @@
                 </tr>
                 <tr>
                     <td></td>
-                    <td class="btn-group"><button id="connection" type="submit">Log In</button></td>
+                    <td class="btn-group"><button type="submit">Log In</button></td>
                 </tr>
             </table>
 
         </form>
+    {% endif %}
 {% endblock %}

@@ -1,5 +1,33 @@
 {% extends "HelpInfo/index.html" %}
 
 {% block content %}
-<p> logs Coming Soon </p>
+
+    <div style="overflow-x: auto;">
+    <table class="data">
+        <tr class="data-line">
+            <th class="data-header">USERNAME</th>
+            <th class="data-header">IP</th>
+            <th class="data-header">Host</th>
+            <th class="data-header">USERDOMAIN</th>
+            <th class="data-header">COMPUTER</th>
+            <th class="data-header">OS</th>
+            <th class="data-header">AGENT</th>
+            <th class="data-header">Login_Date</th>
+         </tr>
+            {% for i in objet %}
+         <tr class="data-line">
+            <td class="data-data">{{i.USERNAME}}</td>
+            <td class="data-data">{{i.IP}}</td>
+            <td class="data-data">{{i.Host}}</td>
+            <td class="data-data">{{i.USERDOMAIN}}</td>
+            <td class="data-data">{{i.COMPUTER}}</td>
+            <td class="data-data">{{i.OS}}</td>
+            <td class="data-data">{{i.AGENT}}</td>
+            <td class="data-data">{{i.DATE}}</td>
+         </tr>
+            {% endfor %}
+     </table>
+
+    </div>
+
 {% endblock %}
