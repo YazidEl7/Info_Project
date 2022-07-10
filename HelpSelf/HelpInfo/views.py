@@ -72,6 +72,8 @@ def logs(request):
 
 def users_history(request):
     if request.user.is_authenticated:
-        return render(request, 'HelpInfo/users_history.html')
+        information = Info.objects.all()  # [:5]
+        output2 = {'Computers': information}
+        return render(request, 'HelpInfo/data.html', output2)
     if not request.user.is_authenticated:
         return HttpResponseRedirect('/login/')

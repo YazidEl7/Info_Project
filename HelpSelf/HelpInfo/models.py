@@ -46,7 +46,23 @@ class Info(models.Model):
     ip = models.ForeignKey(Ipees, models.DO_NOTHING, related_name='IP_Id', db_column='IP_Id', blank=True, null=True)
     status = models.ForeignKey(Ipees, models.DO_NOTHING, related_name='Status_Id', db_column='Status_Id', blank=True,
                                null=True)
+    logged_on = models.TextField(db_column='Logged_On', blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'Info'
+
+
+class Track(models.Model):
+    id = models.AutoField(db_column='Id', unique=True, primary_key=True)
+    comp = models.ForeignKey(Computers, models.DO_NOTHING, db_column='Comp_Id', blank=True,
+                             null=True)
+    user = models.ForeignKey(Users, models.DO_NOTHING, db_column='User_Id', blank=True, null=True)
+    ip = models.ForeignKey(Ipees, models.DO_NOTHING, related_name='IP_Id', db_column='IP_Id', blank=True, null=True)
+    status = models.ForeignKey(Ipees, models.DO_NOTHING, related_name='Status_Id', db_column='Status_Id', blank=True,
+                               null=True)
+    logged_on = models.TextField(db_column='Logged_On', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'Track'
