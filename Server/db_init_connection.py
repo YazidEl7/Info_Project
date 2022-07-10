@@ -1,5 +1,5 @@
 import sqlite3
-
+from datetime import datetime
 
 # database name : comp-info.sqlite, contains 4 tables
 # Tables : IPees, Computers, Users, Info
@@ -25,6 +25,16 @@ def db_init():
     cur.execute('''
     CREATE TABLE IF NOT EXISTS Info
     (Id INTEGER NOT NULL UNIQUE, Comp_Id INTEGER UNIQUE, User_Id INTEGER, IP_Id INTEGER, Status_Id INTEGER, 
+    Logged_On TEXT,
+    PRIMARY KEY("Id" AUTOINCREMENT), 
+    FOREIGN KEY("Comp_Id") REFERENCES Computers (Id) ON DELETE CASCADE, 
+    FOREIGN KEY("User_Id") REFERENCES Users (Id), 
+    FOREIGN KEY("IP_Id") REFERENCES IPees (Id), 
+    FOREIGN KEY("Status_Id") REFERENCES IPees (Id))''')
+    cur.execute('''
+    CREATE TABLE IF NOT EXISTS Track
+    (Id INTEGER NOT NULL UNIQUE, Comp_Id INTEGER UNIQUE, User_Id INTEGER, IP_Id INTEGER, Status_Id INTEGER, 
+    Logged_On TEXT,
     PRIMARY KEY("Id" AUTOINCREMENT), 
     FOREIGN KEY("Comp_Id") REFERENCES Computers (Id) ON DELETE CASCADE, 
     FOREIGN KEY("User_Id") REFERENCES Users (Id), 
@@ -82,8 +92,9 @@ def db_insert(client_instance):
     curse.execute(''' INSERT INTO IPees(IP,Status) VALUES(?,?) ''', (client_instance.address, client_instance.status))
     conn_db.commit()
     ip_id = curse.lastrowid
-    curse.execute(''' INSERT INTO Info(Comp_Id,User_Id,IP_Id,Status_Id) VALUES(?,?,?,?) ''',
-                  (comp_id, user_id, ip_id, ip_id))
+    updated_on = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+    curse.execute(''' INSERT INTO Info(Comp_Id,User_Id,IP_Id,Status_Id, Logged_On) VALUES(?,?,?,?,?) ''',
+                  (comp_id, user_id, ip_id, ip_id, updated_on))
     conn_db.commit()
     print(user_id)
     # Closing Connection to DataBase
@@ -142,14 +153,21 @@ def db_update(client_instance):
                       (client_instance.username, client_instance.domain))
         conn_db.commit()
         c3 = curse.lastrowid
-
+    updated_on = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     f4, c4 = db_search(c1, 4)
     if len(str(c4)) >= 1:
-        curse.execute('''Update Info set Comp_Id = ?, User_Id = ?, IP_Id = ?, Status_Id = ? where id = ?''',
-                      (c1, c3, c2, c2, c4))
+        curse.execute(''' INSERT INTO Track(Comp_Id,User_Id,IP_Id,Status_Id,Logged_On) VALUES(?,?,?,?,?) ''',
+                      (c1, c3, c2, c2, updated_on))
+        conn_db.commit()
+        curse.execute('''Update Info set Comp_Id = ?, User_Id = ?, IP_Id = ?, Status_Id = ? , Logged_On = ? 
+        where id = ?''',
+                      (c1, c3, c2, c2, updated_on, c4))
     else:
-        curse.execute(''' INSERT INTO Info(Comp_Id,User_Id,IP_Id,Status_Id) VALUES(?,?,?,?) ''',
-                      (c1, c3, c2, c2))
+        curse.execute(''' INSERT INTO Track(Comp_Id,User_Id,IP_Id,Status_Id,Logged_On) VALUES(?,?,?,?,?) ''',
+                      (c1, c3, c2, c2, updated_on))
+        conn_db.commit()
+        curse.execute(''' INSERT INTO Info(Comp_Id,User_Id,IP_Id,Status_Id,Logged_On) VALUES(?,?,?,?,?) ''',
+                      (c1, c3, c2, c2, updated_on))
         conn_db.commit()
         info_id = curse.lastrowid
 
