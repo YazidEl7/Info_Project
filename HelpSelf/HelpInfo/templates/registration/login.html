@@ -1,10 +1,23 @@
 {% extends "HelpInfo/index.html" %}
 
 {% block content %}
-    <h2>Log In</h2>
+    <h2 class="login-title">Log In</h2>
         <form method="post">
             {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Log In</button>
+            <table class="login">
+                <tr>
+                    <td>{{ form.username.label_tag }}</td>
+                    <td>{{ form.username }}</td>
+                </tr>
+                <tr>
+                    <td>{{ form.password.label_tag }}</td>
+                    <td>{{ form.password }}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="btn-group"><button id="connection" type="submit">Log In</button></td>
+                </tr>
+            </table>
+
         </form>
 {% endblock %}

@@ -5,14 +5,17 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'HelpInfo/main.css' %}">
     <link href='https://fonts.googleapis.com/css?family=Chela One' rel='stylesheet'>
+
     <title>HelpDesk Info</title>
 </head>
 <body>
     <header>
         <h1>info</h1>
     </header>
+    <div id="list"></div>
     <div>
         {% block content %}{% endblock %}
     </div>
+    <script src="{% static 'HelpInfo/as.js' %}"></script>
 </body>
 </html>

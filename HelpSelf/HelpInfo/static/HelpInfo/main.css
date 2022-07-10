@@ -20,7 +20,7 @@ hr.new1 {
 hr.new2 {
   border: 1px solid #98fb98;
 }
-table {
+table.data {
   border-radius: 10px;
   /* border-collapse: collapse; */
   width: 97%;
@@ -28,7 +28,7 @@ table {
   margin-right: 20px;
   border: 2px solid #98fb98;
 }
-th, td {
+.data-header, .data-data {
   text-align: left;
   padding: 8px;
 }
@@ -77,4 +77,28 @@ tr:nth-child(even) {background-color: #F0FFFF;}
 }
 .Out button:hover {
   background-color: #98fb98;
+}
+table.login {
+  border-radius: 10px;
+  /* border-collapse: collapse; */
+  width: 20%;
+  margin-left: auto;
+  margin-right: auto;
+  border: 2px solid #98fb98;
+  padding: 20px 10px;
+}
+table.login tr {
+  background-color: #FFFFF0;
+}
+td.btn-group {
+  margin-top: 10px;
+}
+h2.login-title {
+  font-family: 'Chela One';
+  text-align: center;
+  color: black;
+
+}
+p {
+  text-align: center;
 }

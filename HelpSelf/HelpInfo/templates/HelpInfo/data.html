@@ -13,23 +13,23 @@
      </div>
     <hr class="new2">
     <div style="overflow-x: auto;">
-    <table>
-        <tr>
-            <th>Computer Name</th>
-            <th>User Name</th>
-            <th>Status</th>
-            <th>IP</th>
+    <table class="data">
+        <tr class="data-line">
+            <th class="data-header">Computer Name</th>
+            <th class="data-header">User Name</th>
+            <th class="data-header">Status</th>
+            <th class="data-header">IP</th>
          </tr>
             {% for i in Computers %}
-         <tr>
-            <td>{{i.comp.comp_name}}</td>
-            <td>{{i.user.user}}</td>
+         <tr class="data-line">
+            <td class="data-data">{{i.comp.comp_name}}</td>
+            <td class="data-data">{{i.user.user}}</td>
                 {% if i.status.status == 1 %}
-                    <td>Up</td>
+                    <td class="data-data">Up</td>
                     {% elif i.status.status == 0 %}
-                        <td>Down</td>
+                        <td class="data-data">Down</td>
                 {% endif %}
-            <td>{{i.ip.ip}}</td>
+            <td class="data-data">{{i.ip.ip}}</td>
          </tr>
             {% endfor %}
      </table>
@@ -37,7 +37,8 @@
     </div>
     {% else %}
             <p> You are not logged in </p>
-            <a href="{% url 'login' %}">Log In</a>
+            <br>
+            <h2 class="login-title"><a href="{% url 'login' %}">Log In</a></h2>
     {% endif %}
 {% endblock %}
 
