@@ -22,7 +22,7 @@ hr.new2 {
 }
 table.data {
   border-radius: 10px;
-  border-collapse: collapse;
+  /*border-collapse: collapse;*/
   width: 97%;
   margin-left: 20px;
   margin-right: 20px;
