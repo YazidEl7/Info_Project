@@ -33,7 +33,7 @@ def db_init():
     FOREIGN KEY("Status_Id") REFERENCES IPees (Id))''')
     cur.execute('''
     CREATE TABLE IF NOT EXISTS Track
-    (Id INTEGER NOT NULL UNIQUE, Comp_Id INTEGER UNIQUE, User_Id INTEGER, IP_Id INTEGER, Status_Id INTEGER, 
+    (Id INTEGER NOT NULL UNIQUE, Comp_Id INTEGER, User_Id INTEGER, IP_Id INTEGER, Status_Id INTEGER, 
     Logged_On TEXT,
     PRIMARY KEY("Id" AUTOINCREMENT), 
     FOREIGN KEY("Comp_Id") REFERENCES Computers (Id) ON DELETE CASCADE, 
@@ -96,6 +96,9 @@ def db_insert(client_instance):
     curse.execute(''' INSERT INTO Info(Comp_Id,User_Id,IP_Id,Status_Id, Logged_On) VALUES(?,?,?,?,?) ''',
                   (comp_id, user_id, ip_id, ip_id, updated_on))
     conn_db.commit()
+    curse.execute(''' INSERT INTO Track(Comp_Id,User_Id,IP_Id,Status_Id,Logged_On) VALUES(?,?,?,?,?) ''',
+                  (comp_id, user_id, ip_id, ip_id, updated_on))
+    conn_db.commit()
     print(user_id)
     # Closing Connection to DataBase
     db_close_conn(conn_db)
@@ -106,40 +109,42 @@ def db_search(to_be_searched, choice):
     curse, conn_db = db_conn()
     # checking whether the computer is already registered
     check = ''
+    checkl = ''
     found = 0
     try:
         if choice == 1:
-            curse.execute('''SELECT Id FROM Computers WHERE BIOS_Serial = ?''', (to_be_searched,))
+            curse.execute('''SELECT Id, Comp_Name FROM Computers WHERE BIOS_Serial = ?''', (to_be_searched,))
         elif choice == 2:
-            curse.execute('''SELECT Id FROM IPees WHERE IP = ?''', (to_be_searched,))
+            curse.execute('''SELECT Id, Status FROM IPees WHERE IP = ?''', (to_be_searched,))
         elif choice == 3:
-            curse.execute('''SELECT Id FROM Users WHERE User = ?''', (to_be_searched,))
+            curse.execute('''SELECT Id, Domain FROM Users WHERE User = ?''', (to_be_searched,))
         elif choice == 4:
-            curse.execute('''SELECT Id FROM Info WHERE Comp_Id = ?''', (to_be_searched,))
+            curse.execute('''SELECT Id, Logged_On FROM Info WHERE Comp_Id = ?''', (to_be_searched,))
         row = curse.fetchone()
         check = row[0]
+        checkl = row[1]
         found = 1
     except:
         found = 0
     # Closing Connection to DataBase
     db_close_conn(conn_db)
-    return found, check
+    return found, check, checkl
 
 
 def db_update(client_instance):
     # Connecting to DataBase
     curse, conn_db = db_conn()
 
-    f1, c1 = db_search(client_instance.biosserial, 1)
+    f1, c1, cl = db_search(client_instance.biosserial, 1)
     print(f"c1 : {c1} {type(c1)}, bios {client_instance.biosserial} {type(client_instance.biosserial)}")
-    if len(str(c1)) < 1:
+    if len(str(cl)) < 1:
         curse.execute(''' INSERT INTO Computers(BIOS_Serial,Comp_Name) VALUES(?,?) ''',
                       (client_instance.biosserial, client_instance.computername))
         conn_db.commit()
         c1 = curse.lastrowid
 
-    f2, c2 = db_search(client_instance.address, 2)
-    if len(str(c2)) >= 1:
+    f2, c2, cl = db_search(client_instance.address, 2)
+    if len(str(cl)) >= 1:
         curse.execute('''Update IPees set Status = 1 where id = ?''', (c2,))
     else:
         curse.execute(''' INSERT INTO IPees(IP,Status) VALUES(?,?) ''',
@@ -147,21 +152,21 @@ def db_update(client_instance):
         conn_db.commit()
         c2 = curse.lastrowid
 
-    f3, c3 = db_search(client_instance.username, 3)
-    if len(str(c3)) < 1:
+    f3, c3, cl = db_search(client_instance.username, 3)
+    if len(str(cl)) < 1:
         curse.execute(''' INSERT INTO Users(User,Domain) VALUES(?,?) ''',
                       (client_instance.username, client_instance.domain))
         conn_db.commit()
         c3 = curse.lastrowid
     updated_on = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-    f4, c4 = db_search(c1, 4)
-    if len(str(c4)) >= 1:
+    f4, c4, cl = db_search(c1, 4)
+    if len(str(cl)) >= 1:
         curse.execute(''' INSERT INTO Track(Comp_Id,User_Id,IP_Id,Status_Id,Logged_On) VALUES(?,?,?,?,?) ''',
                       (c1, c3, c2, c2, updated_on))
         conn_db.commit()
         curse.execute('''Update Info set Comp_Id = ?, User_Id = ?, IP_Id = ?, Status_Id = ? , Logged_On = ? 
-        where id = ?''',
-                      (c1, c3, c2, c2, updated_on, c4))
+        where id = ?''', (c1, c3, c2, c2, updated_on, c4))
+        conn_db.commit()
     else:
         curse.execute(''' INSERT INTO Track(Comp_Id,User_Id,IP_Id,Status_Id,Logged_On) VALUES(?,?,?,?,?) ''',
                       (c1, c3, c2, c2, updated_on))
