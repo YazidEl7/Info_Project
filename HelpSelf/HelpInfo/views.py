@@ -74,6 +74,6 @@ def users_history(request):
     if request.user.is_authenticated:
         information = Track.objects.all()  # [:5]
         output2 = {'Computers': information}
-        return render(request, 'HelpInfo/data.html', output2)
+        return render(request, 'HelpInfo/users_history.html', output2)
     if not request.user.is_authenticated:
         return HttpResponseRedirect('/login/')
