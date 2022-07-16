@@ -1,7 +1,7 @@
 import json
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import Info
+from .models import Info, Track
 from django.utils.html import escape
 from django.http import HttpResponseRedirect, HttpRequest
 from datetime import datetime
@@ -72,7 +72,7 @@ def logs(request):
 
 def users_history(request):
     if request.user.is_authenticated:
-        information = Info.objects.all()  # [:5]
+        information = Track.objects.all()  # [:5]
         output2 = {'Computers': information}
         return render(request, 'HelpInfo/data.html', output2)
     if not request.user.is_authenticated:

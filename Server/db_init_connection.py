@@ -33,13 +33,13 @@ def db_init():
     FOREIGN KEY("Status_Id") REFERENCES IPees (Id))''')
     cur.execute('''
     CREATE TABLE IF NOT EXISTS Track
-    (Id INTEGER NOT NULL UNIQUE, Comp_Id INTEGER, User_Id INTEGER, IP_Id INTEGER, Status_Id INTEGER, 
-    Logged_On TEXT,
+    (Id INTEGER NOT NULL UNIQUE, Comp_Track INTEGER, User_Track INTEGER, IP_Track INTEGER, Status_Track INTEGER, 
+    Logged_On_Track TEXT,
     PRIMARY KEY("Id" AUTOINCREMENT), 
-    FOREIGN KEY("Comp_Id") REFERENCES Computers (Id) ON DELETE CASCADE, 
-    FOREIGN KEY("User_Id") REFERENCES Users (Id), 
-    FOREIGN KEY("IP_Id") REFERENCES IPees (Id), 
-    FOREIGN KEY("Status_Id") REFERENCES IPees (Id))''')
+    FOREIGN KEY("Comp_Track") REFERENCES Computers (Id) ON DELETE CASCADE, 
+    FOREIGN KEY("User_Track") REFERENCES Users (Id), 
+    FOREIGN KEY("IP_Track") REFERENCES IPees (Id), 
+    FOREIGN KEY("Status_Track") REFERENCES IPees (Id))''')
     conn.close()
 
 
@@ -96,8 +96,8 @@ def db_insert(client_instance):
     curse.execute(''' INSERT INTO Info(Comp_Id,User_Id,IP_Id,Status_Id, Logged_On) VALUES(?,?,?,?,?) ''',
                   (comp_id, user_id, ip_id, ip_id, updated_on))
     conn_db.commit()
-    curse.execute(''' INSERT INTO Track(Comp_Id,User_Id,IP_Id,Status_Id,Logged_On) VALUES(?,?,?,?,?) ''',
-                  (comp_id, user_id, ip_id, ip_id, updated_on))
+    curse.execute(''' INSERT INTO Track(Comp_Track,User_Track,IP_Track,Status_Track,Logged_On_Track) 
+    VALUES(?,?,?,?,?) ''', (comp_id, user_id, ip_id, ip_id, updated_on))
     conn_db.commit()
     print(user_id)
     # Closing Connection to DataBase
@@ -161,15 +161,15 @@ def db_update(client_instance):
     updated_on = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     f4, c4, cl = db_search(c1, 4)
     if len(str(cl)) >= 1:
-        curse.execute(''' INSERT INTO Track(Comp_Id,User_Id,IP_Id,Status_Id,Logged_On) VALUES(?,?,?,?,?) ''',
-                      (c1, c3, c2, c2, updated_on))
+        curse.execute(''' INSERT INTO Track(Comp_Track,User_Track,IP_Track,Status_Track,Logged_On_Track) 
+        VALUES(?,?,?,?,?) ''', (c1, c3, c2, c2, updated_on))
         conn_db.commit()
         curse.execute('''Update Info set Comp_Id = ?, User_Id = ?, IP_Id = ?, Status_Id = ? , Logged_On = ? 
         where id = ?''', (c1, c3, c2, c2, updated_on, c4))
         conn_db.commit()
     else:
-        curse.execute(''' INSERT INTO Track(Comp_Id,User_Id,IP_Id,Status_Id,Logged_On) VALUES(?,?,?,?,?) ''',
-                      (c1, c3, c2, c2, updated_on))
+        curse.execute(''' INSERT INTO Track(Comp_Track,User_Track,IP_Track,Status_Track,Logged_On_Track) 
+        VALUES(?,?,?,?,?) ''', (c1, c3, c2, c2, updated_on))
         conn_db.commit()
         curse.execute(''' INSERT INTO Info(Comp_Id,User_Id,IP_Id,Status_Id,Logged_On) VALUES(?,?,?,?,?) ''',
                       (c1, c3, c2, c2, updated_on))
