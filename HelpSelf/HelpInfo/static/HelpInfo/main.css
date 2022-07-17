@@ -102,3 +102,6 @@ h2.login-title {
 p {
   text-align: center;
 }
+#investigate:hover {
+  background-color: #fae473;
+}

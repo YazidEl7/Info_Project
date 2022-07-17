@@ -52,7 +52,7 @@ def between(request):
 
 def data(request):
     if request.user.is_authenticated:
-        information = Info.objects.all()  # [:5]
+        information = Info.objects.all().order_by('-logged_on')  # [:5]
         # output = '<br>'.join([f"{i.comp.comp_name} {i.user.user} {i.status.status} {i.ip.ip}" for i in information])
         output1 = {'Computers': information}
         return render(request, 'HelpInfo/data.html', output1)
@@ -72,8 +72,28 @@ def logs(request):
 
 def users_history(request):
     if request.user.is_authenticated:
-        information = Track.objects.all()  # [:5]
+        information = Track.objects.all().order_by('-logged_on_t') # [:5]
         output2 = {'Computers': information}
         return render(request, 'HelpInfo/users_history.html', output2)
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect('/login/')
+
+
+def u_h(request, user):
+    if request.user.is_authenticated:
+
+        information = Track.objects.all().order_by('-logged_on_t').filter(user_t__user=user)  # [:5]
+        output3 = {'Computers': information}
+        return render(request, 'HelpInfo/users_history.html', output3)
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect('/login/')
+
+
+def c_h(request, comp):
+    if request.user.is_authenticated:
+
+        information = Track.objects.all().order_by('-logged_on_t').filter(comp_t__comp_name=comp)  # [:5]
+        output4 = {'Computers': information}
+        return render(request, 'HelpInfo/users_history.html', output4)
     if not request.user.is_authenticated:
         return HttpResponseRedirect('/login/')
