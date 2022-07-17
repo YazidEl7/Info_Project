@@ -5,6 +5,7 @@ from .models import Info, Track
 from django.utils.html import escape
 from django.http import HttpResponseRedirect, HttpRequest
 from datetime import datetime
+from django.db.models import Q
 
 
 # Create your views here.
@@ -72,7 +73,7 @@ def logs(request):
 
 def users_history(request):
     if request.user.is_authenticated:
-        information = Track.objects.all().order_by('-logged_on_t') # [:5]
+        information = Track.objects.all().order_by('-logged_on_t')  # [:5]
         output2 = {'Computers': information}
         return render(request, 'HelpInfo/users_history.html', output2)
     if not request.user.is_authenticated:
@@ -81,7 +82,6 @@ def users_history(request):
 
 def u_h(request, user):
     if request.user.is_authenticated:
-
         information = Track.objects.all().order_by('-logged_on_t').filter(user_t__user=user)  # [:5]
         output3 = {'Computers': information}
         return render(request, 'HelpInfo/users_history.html', output3)
@@ -91,9 +91,25 @@ def u_h(request, user):
 
 def c_h(request, comp):
     if request.user.is_authenticated:
-
         information = Track.objects.all().order_by('-logged_on_t').filter(comp_t__comp_name=comp)  # [:5]
         output4 = {'Computers': information}
         return render(request, 'HelpInfo/users_history.html', output4)
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect('/login/')
+
+
+def result(request):
+    if request.user.is_authenticated:
+        if request.method == "GET":
+            query = request.GET.get('search')
+            if query:
+                information = Track.objects.all().order_by('-logged_on_t').filter(Q(comp_t__comp_name__icontains=query)
+                                                                                  | Q(user_t__user__icontains=query)
+                                                                                  | Q(ip_t__ip__icontains=query)
+                                                                                  | Q(logged_on_t__icontains=query))
+                output5 = {'Computers': information}
+                return render(request, 'HelpInfo/users_history.html', output5)
+            else:
+                return HttpResponseRedirect('/Home')
     if not request.user.is_authenticated:
         return HttpResponseRedirect('/login/')

@@ -13,16 +13,22 @@
         <h1>info</h1>
     </header>
     {% if user.is_authenticated %}
-    <div class="Out" >
-        <button onclick="window.location.href = {% url 'logout' %};">User : {{ user.username }} | Log Out</button>
-    </div>
-    <hr class="new1">
-    <div class="btn-group">
-        <button onclick="window.location.href = '/Home';">Computers</button>
-        <button id="logs" onclick="window.location.href = '/Logs';">Logs</button>
-        <button onclick="window.location.href = '/Users_History';">Users Login History</button>
-     </div>
-    <hr class="new2">
+        <div class="search-container">
+            <form action="{% url 'Result' %}" method="get">
+                <input type="text" placeholder="Search.." name="search">
+                <button type="submit"><i class="fa fa-search"></i></button>
+            </form>
+        </div>
+        <div class="Out" >
+            <button onclick="window.location.href = {% url 'logout' %};">User : {{ user.username }} | Log Out</button>
+        </div>
+        <hr class="new1">
+        <div class="btn-group">
+            <button onclick="window.location.href = '/Home';">Computers</button>
+            <button id="logs" onclick="window.location.href = '/Logs';">Logs</button>
+            <button onclick="window.location.href = '/Users_History';">Users Login History</button>
+        </div>
+        <hr class="new2">
     {% endif %}
     <div>
         {% block content %}{% endblock %}
