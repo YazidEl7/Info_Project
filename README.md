@@ -19,28 +19,29 @@ graph TD;
     /Info_Project-->/HelpSelf;
     /HelpSelf-->/comp-info.sqlite3;
 ```
-
-* /Info_Project/Server_Main.py
-* /Info_Project/Server/Client_Class.py
-* /Info_Project/Server/db_init_connection.py
-* /Info_Project/Server/Sender_Receiver.py 
-* /Info_Project/HelpSelf/comp-info.sqlite3
  
 ![comp-info](/assets/images/comp-info.jpg)
 
 ## 2nd part: 
 
-* /Info_Project/HelpSelf/comp-info.sqlite3
-* /Info_Project/HelpSelf/static/Dynamic/logged_users.json
+```mermaid
+graph TD;
+    /Info_Project-->/HelpSelf;
+    /HelpSelf-->/comp-info.sqlite3;
+    /Info_Project-->/static;
+    /static-->/Dynamic;
+    /Dynamic-->/logged_users.json;
+    /static-->/HelpInfo/main.css;
+    /HelpSelf-->/templates/HelpInfo;
+    /templates/HelpInfo-->/index.html;
+    /templates/HelpInfo-->/data.html;
+    /templates/HelpInfo-->/logs.html;
+    /templates/HelpInfo-->/users_history.html;
+    /templates/HelpInfo-->/registration;
+    /registration-->login.html;
+```
 
 ![logged-users](/assets/images/logged_users.jpg)
-
-* /Info_Project/HelpSelf/static/HelpInfo/main.css
-* /Info_Project/HelpSelf/templates/HelpInfo/index.html
-* /Info_Project/HelpSelf/templates/HelpInfo/data.html
-* /Info_Project/HelpSelf/templates/HelpInfo/logs.html
-* /Info_Project/HelpSelf/templates/HelpInfo/users_history.html
-* /Info_Project/HelpSelf/templates/HelpInfo/registration/login.html
 
 ![login-page](/assets/images/login.jpg)
 
