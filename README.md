@@ -69,6 +69,19 @@ in order to make a table of users that logged plus a few other details.
 
 ![logged-users](/assets/images/logged_users.jpg)
 
+```mermaid
+graph TD;
+    A[http://127.0.0.1] --> B[views : m];
+    B --> C{is the User authenticated?};
+    C --> |Yes| D[redirect_to : /Home, views : data];
+    C --> |No| E[redirect_to : /login/, views : data];
+    E-->  F{authentication succeded?};
+    F --> |Yes| G[redirect_to : /between (for logging), views : between];
+    G --> D;
+    
+    
+'''
+
 ![login-page](/assets/images/login.jpg)
 ### Home page:
 Contains current users on each computer.<br/>
