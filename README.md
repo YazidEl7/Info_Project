@@ -50,7 +50,7 @@ in order to make a table of users that logged plus a few other details.
 
 ![login-page](/assets/images/login.jpg)
 ### Home page:
-Contains current users on eaxh computer
+Contains current users on each computer.
 Notice : when you click on a row it shows you every user that has logged in to that computer !
 
 ![computers](/assets/images/COMPUTERS.jpg)
