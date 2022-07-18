@@ -12,7 +12,7 @@ the 2nd part contains a Django app that’ll access that database and get data i
 * /Info_Project/Server/db_init_connection.py
 * /Info_Project/Server/Sender_Receiver.py 
 * /Info_Project/HelpSelf/comp-info.sqlite3
-* 
+ 
 ![comp-info](/assets/images/comp-info.jpg)
 
 ## 2nd part: 
