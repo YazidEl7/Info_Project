@@ -41,13 +41,26 @@ graph TD;
     /templates/HelpInfo-->/registration;
     /registration-->login.html;
 ```
+### logged Users :
+
+At successful login we gonna take the HTTP headers and store what we want in a JSON file, 
+in order to make a table of users that logged plus a few other details.
 
 ![logged-users](/assets/images/logged_users.jpg)
 
 ![login-page](/assets/images/login.jpg)
+### Home page:
+Contains current users on eaxh computer
+Notice : when you click on a row it shows you every user that has logged in to that computer !
 
 ![computers](/assets/images/COMPUTERS.jpg)
 
+### logged on users logs
+
 ![logs](/assets/images/LOGS.jpg)
+
+### Users History:
+it keeps track of every computer a user has logged on to and when was that exactly.
+Notice : when you click on a row it shows you every computer that that user has logged on to before !
 
 ![Users-History](/assets/images/USERS_HISTORY.jpg)
