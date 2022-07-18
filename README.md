@@ -5,7 +5,7 @@ Also to limit remote access to servers that might give you informations about a 
 This project consists of two parts; the main idea is that the 1st part contains a server that receives data from clients and it stores it in a database, 
 the 2nd part contains a Django app that’ll access that database and get data in order to show it in tables.
 
-# 1st part: 
+## 1st part: 
 
 * /Info_Project/Server_Main.py
 * /Info_Project/Server/Client_Class.py
@@ -14,7 +14,7 @@ the 2nd part contains a Django app that’ll access that database and get data i
 * /Info_Project/HelpSelf/comp-info.sqlite3
 ![comp-info](https://user-images.githubusercontent.com/94143047/179538200-03bdcdd6-bd05-4cb4-ac26-f0f17e70bac1.jpg)
 
-# 2nd part: 
+## 2nd part: 
 
 * /Info_Project/HelpSelf/comp-info.sqlite3
 * /Info_Project/HelpSelf/static/Dynamic/logged_users.json
