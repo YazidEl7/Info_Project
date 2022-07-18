@@ -25,6 +25,7 @@ graph TD;
  
 ![comp-info](/assets/images/comp-info.jpg)
 
+**db_init_connection.py** : A bit of what happens.
 ```mermaid
 graph TD;
     A[ComputerName] --> B{Exist in DB?};
