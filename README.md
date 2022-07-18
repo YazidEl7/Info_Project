@@ -5,6 +5,13 @@ Also to limit remote access to servers that might give you informations about a 
 This project consists of two parts; the main idea is that the 1st part contains a server that receives data from clients and it stores it in a database, 
 the 2nd part contains a Django app that’ll access that database and get data in order to show it in tables.
 
+**Might work on the below stuff l8r** : 
+- Still needs to be tested in restricting Environments.
+- Perhaps We get more data, like OS version ...
+- Needs a function on Server_Main that'll change Status to 0, after 3min without a syn with a specific computer.
+- Before utilization, change IP adress on client, port number if you want and create your own admin user on Django.
+- changeing the status field on the website to show colored indicators.
+
 ## 1st part: 
 
 **Server_Main.py** : Launch it on server <br/>
