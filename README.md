@@ -7,7 +7,7 @@ the 2nd part contains a Django app that’ll access that database and get data i
 
 ## 1st part: 
 
-**Server_Main.py** : Launch it on server
+**Server_Main.py** : Launch it on server <br/>
 **Client_Service** : Laucnh it on client side, but change the server adress that it'll connect to, according to yours.
 
 ```mermaid
