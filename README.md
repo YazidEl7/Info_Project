@@ -11,11 +11,12 @@ the 2nd part contains a Django app that’ll access that database and get data i
 - Needs a function on Server_Main that'll change Status to 0, after 3min without a syn with a specific computer.
 - Before utilization, change IP adress on client, port number if you want and create your own admin user on Django.
 - changeing the status field on the website to show colored indicators.
+- Make the client service run silently.
 
 ## 1st part: 
 
 **Server_Main.py** : Launch it on server <br/>
-**Client_Service** : Laucnh it on client side, but change the server adress that it'll connect to, according to yours.
+**Client_Service** : Launch it on client side, but change the server adress that it'll connect to, according to yours.
 
 ```mermaid
 graph TD;
