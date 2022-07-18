@@ -10,7 +10,7 @@ from datetime import datetime
 
 
 def db_init():
-    conn = sqlite3.connect('comp-info.sqlite')
+    conn = sqlite3.connect('./HelpSelf/comp-info.sqlite3')
     cur = conn.cursor()
     cur.execute('''
     CREATE TABLE IF NOT EXISTS IPees
@@ -31,6 +31,7 @@ def db_init():
     FOREIGN KEY("User_Id") REFERENCES Users (Id), 
     FOREIGN KEY("IP_Id") REFERENCES IPees (Id), 
     FOREIGN KEY("Status_Id") REFERENCES IPees (Id))''')
+    # ON delete
     cur.execute('''
     CREATE TABLE IF NOT EXISTS Track
     (Id INTEGER NOT NULL UNIQUE, Comp_Track INTEGER, User_Track INTEGER, IP_Track INTEGER, Status_Track INTEGER, 
@@ -99,7 +100,7 @@ def db_insert(client_instance):
     curse.execute(''' INSERT INTO Track(Comp_Track,User_Track,IP_Track,Status_Track,Logged_On_Track) 
     VALUES(?,?,?,?,?) ''', (comp_id, user_id, ip_id, ip_id, updated_on))
     conn_db.commit()
-    print(user_id)
+    print(f"user id {user_id}")
     # Closing Connection to DataBase
     db_close_conn(conn_db)
 
