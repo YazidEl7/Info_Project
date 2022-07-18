@@ -12,11 +12,15 @@ the 2nd part contains a Django app that’ll access that database and get data i
 * /Info_Project/Server/db_init_connection.py
 * /Info_Project/Server/Sender_Receiver.py 
 * /Info_Project/HelpSelf/comp-info.sqlite3
+* 
 ![comp-info](/assets/images/comp-info.jpg)
+
 ## 2nd part: 
 
 * /Info_Project/HelpSelf/comp-info.sqlite3
 * /Info_Project/HelpSelf/static/Dynamic/logged_users.json
+* 
+![loggged-users](/assets/images/loggged-users.jpg)
 
 * /Info_Project/HelpSelf/static/HelpInfo/main.css
 * /Info_Project/HelpSelf/templates/HelpInfo/index.html
@@ -24,3 +28,11 @@ the 2nd part contains a Django app that’ll access that database and get data i
 * /Info_Project/HelpSelf/templates/HelpInfo/logs.html
 * /Info_Project/HelpSelf/templates/HelpInfo/users_history.html
 * /Info_Project/HelpSelf/templates/HelpInfo/registration/login.html
+
+![login-page](/assets/images/login.jpg)
+
+![computers](/assets/images/COMPUTERS.jpg)
+
+![logged-users](/assets/images/LOGS.jpg)
+
+![Users-History](/assets/images/USERS_HISTORY.jpg)
