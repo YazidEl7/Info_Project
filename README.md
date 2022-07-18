@@ -69,20 +69,21 @@ in order to make a table of users that logged plus a few other details.
 
 ![logged-users](/assets/images/logged_users.jpg)
 
+**Views** : between is the view I implemented for upon log in logging.
+
 ```mermaid
 graph TD;
     A[http://127.0.0.1] --> B[views : m];
     B --> C{is the User authenticated?};
     C --> |Yes| D[redirect_to : /Home, views : data];
-    C --> |No| E[redirect_to : /login/, views : data];
-    E-->  F{authentication succeded?};
-    F --> |Yes| G[redirect_to : /between (for logging), views : between];
-    G --> D;
-    
-    
-'''
+    C --> |No| E[redirect_to : /login/ ];
+    E --> F{authentication succeded?};
+    F --> |Yes| G[redirect_to : /between --for logging--, views : between];
+    G --> H[redirect_to : /Home, views : data];
+```
 
 ![login-page](/assets/images/login.jpg)
+
 ### Home page:
 Contains current users on each computer.<br/>
 Notice : when you click on a row it shows you every user that has logged in to that computer !
