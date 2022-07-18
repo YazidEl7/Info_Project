@@ -33,7 +33,7 @@ graph TD;
     /static-->/Dynamic;
     /Dynamic-->/logged_users.json;
     /static-->/HelpInfo/main.css;
-    /HelpSelf-->/templates/HelpInfo;
+    /HelpInfo-->/templates/HelpInfo;
     /templates/HelpInfo-->/index.html;
     /templates/HelpInfo-->/data.html;
     /templates/HelpInfo-->/logs.html;
