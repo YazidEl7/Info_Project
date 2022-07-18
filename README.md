@@ -19,8 +19,8 @@ the 2nd part contains a Django app that’ll access that database and get data i
 
 * /Info_Project/HelpSelf/comp-info.sqlite3
 * /Info_Project/HelpSelf/static/Dynamic/logged_users.json
-* 
-![loggged-users](/assets/images/loggged-users.jpg)
+
+![logged-users](/assets/images/logged-users.jpg)
 
 * /Info_Project/HelpSelf/static/HelpInfo/main.css
 * /Info_Project/HelpSelf/templates/HelpInfo/index.html
