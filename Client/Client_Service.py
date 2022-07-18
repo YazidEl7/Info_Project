@@ -6,9 +6,13 @@ import os
 def info():
     #   Exist(1) send username, ip and status
     mylist = []
-    username = {"username": os.getlogin()}
+    username = {"username": os.getlogin().upper()}
     mylist.append(username)
-    domain = {"domain": os.environ['userdomain']}
+    # systeminfo | findstr /B "Domain"
+    # wmic computersystem get domain
+    command = "echo %USERDOMAIN%"
+    domain = {"domain": os.popen(command).read().replace('\n', '').upper()}
+    # domain = {"domain": os.environ['userdomain'].upper()}
     mylist.append(domain)
     ip = {"IP": str(socket.gethostbyname(socket.gethostname()))}
     mylist.append(ip)
@@ -17,7 +21,7 @@ def info():
     mylist.append(status)
     command = "wmic bios get serialnumber"
     bios_ser = os.popen(command).read().replace("\n", "").replace("SerialNumber  ", "").replace("      ", "")
-    bios_ser = {"bios_serial": bios_ser}
+    bios_ser = {"bios_serial": bios_ser.upper()}
     mylist.append(bios_ser)
     return mylist
 
@@ -46,7 +50,6 @@ def send(msg):
                 connected = False
     return state '''
 
-
 HEADER = 64
 PORT = 8888
 FORMAT = 'utf-8'
@@ -62,7 +65,7 @@ while True:
             time.sleep(3600)
         #   Just logged in or not yet registered in database wait 3 minutes, we'll make it 3 seconds just for tests
         elif Connection_Status == 0:
-            time.sleep(3)
+            time.sleep(180)
 
         try:
             client.connect(ADDR)
@@ -75,7 +78,7 @@ while True:
             break
         elif Connection_Status == 1:
             #   First we send computer name for db registration check
-            send(os.environ['COMPUTERNAME'])
+            send(os.environ['COMPUTERNAME'].upper())
             #   After every sg we are required to send EOF_MESSAGE, so that server on receive could break out of loop
             send(EOF_MESSAGE)
             # the data we'll send is a list of dictionaries
@@ -92,4 +95,3 @@ while True:
             # waiting for 60 seconds before closing,
             time.sleep(60)
             client.close()
-

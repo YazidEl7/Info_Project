@@ -11,19 +11,19 @@
             <th class="data-header">IP</th>
             <th class="data-header">LastSync</th>
          </tr>
-            {% for i in Computers %}
-         <tr class="data-line" id="investigate" onclick="window.location.href = '/U_H/{{i.user_t.user}}';">
-            <td class="data-data">{{i.comp_t.comp_name}}</td>
-            <td class="data-data">{{i.user_t.user}}</td>
-                {% if i.status_t.status == 1 %}
-                    <td class="data-data">Up</td>
+         {% for i in Computers %}
+            <tr class="data-line" id="investigate" onclick="window.location.href = '/U_H/{{i.user_t.user}}';">
+                <td class="data-data">{{i.comp_t.comp_name}}</td>
+                <td class="data-data">{{i.user_t.user}}</td>
+                    {% if i.status_t.status == 1 %}
+                        <td class="data-data">Up</td>
                     {% elif i.status_t.status == 0 %}
                         <td class="data-data">Down</td>
-                {% endif %}
-            <td class="data-data">{{i.ip_t.ip}}</td>
-            <td class="data-data">{{i.logged_on_t}}</td>
+                    {% endif %}
+                <td class="data-data">{{i.ip_t.ip}}</td>
+                <td class="data-data">{{i.logged_on_t}}</td>
          </tr>
-            {% endfor %}
+         {% endfor %}
      </table>
 
     </div>
