@@ -32,7 +32,7 @@ graph TD;
     /HelpInfo-->/static;
     /static-->/Dynamic;
     /Dynamic-->/logged_users.json;
-    /static-->/HelpInfo;
+    /static-->/HelpInfo/main.css;
     /HelpInfo-->/templates/HelpInfo;
     /templates/HelpInfo-->/index.html;
     /templates/HelpInfo-->/data.html;
