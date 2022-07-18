@@ -7,6 +7,14 @@ the 2nd part contains a Django app that’ll access that database and get data i
 
 ## 1st part: 
 
+```mermaid
+graph TD;
+    A-->B;
+    A-->C;
+    B-->D;
+    C-->D;
+```
+
 * /Info_Project/Server_Main.py
 * /Info_Project/Server/Client_Class.py
 * /Info_Project/Server/db_init_connection.py
