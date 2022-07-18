@@ -10,7 +10,7 @@ the 2nd part contains a Django app that’ll access that database and get data i
 - Perhaps We get more data, like OS version ...
 - Needs a function on Server_Main that'll change Status to 0, after 3min without a syn with a specific computer.
 - Before utilization, change IP adress on client, port number if you want and create your own admin user on Django.
-- changeing the status field on the website to show colored indicators.
+- changing the status field on the website to show colored indicators.
 - Make the client service run silently.
 
 ## 1st part: 
