@@ -20,7 +20,7 @@ the 2nd part contains a Django app that’ll access that database and get data i
 * /Info_Project/HelpSelf/comp-info.sqlite3
 * /Info_Project/HelpSelf/static/Dynamic/logged_users.json
 
-![logged-users](/assets/images/logged-users.jpg)
+![logged-users](/assets/images/logged_users.jpg)
 
 * /Info_Project/HelpSelf/static/HelpInfo/main.css
 * /Info_Project/HelpSelf/templates/HelpInfo/index.html
@@ -33,6 +33,6 @@ the 2nd part contains a Django app that’ll access that database and get data i
 
 ![computers](/assets/images/COMPUTERS.jpg)
 
-![logged-users](/assets/images/LOGS.jpg)
+![logs](/assets/images/LOGS.jpg)
 
 ![Users-History](/assets/images/USERS_HISTORY.jpg)
