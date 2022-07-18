@@ -22,6 +22,21 @@ graph TD;
  
 ![comp-info](/assets/images/comp-info.jpg)
 
+flowchart TD
+    A[ComputerName] --> B{Exist in DB?}
+    B -->|Yes| C[Update]
+    C --> D{serial in Info is the serial received?}
+    D --> |No| F[Insert the name in Computers]
+    C --> G{Received IP exist?}
+    G --> |No| H[Insert the IP in IPees]
+    G --> |Yes| I[Insert the IP in IPees]
+    C --> J{Received User exist?}
+    J --> |No| K[Insert the user in Users]
+    C --> L{Computer exist in Info?}
+    L --> |Yes| M[Update Info & Insert Into Track]
+    L --> |No| M[Insert into Info & Track]
+    B ---->|No| E[Insert in Info & Track]
+
 ## 2nd part: 
 
 ```mermaid
