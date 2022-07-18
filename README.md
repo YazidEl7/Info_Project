@@ -11,6 +11,8 @@ the 2nd part contains a Django app that’ll access that database and get data i
 graph TD;
     /Info_Project-->/Server_Main.py;
     /Info_Project-->/Server;
+    /Info_Project-->/Client;
+    /Client-->/Client_Service.py;
     /Server-->/Client_Class.py;
     /Server-->/db_init_connection.py;
     /Server-->/Sender_Receiver.py;
