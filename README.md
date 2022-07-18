@@ -12,7 +12,7 @@ the 2nd part contains a Django app that’ll access that database and get data i
 * /Info_Project/Server/db_init_connection.py
 * /Info_Project/Server/Sender_Receiver.py 
 * /Info_Project/HelpSelf/comp-info.sqlite3
-![comp-info](./comp-info.jpg)
+![comp-info](https://www.cerballiance.fr/sites/www.cerballiance.fr/files/styles/damier_desktop/public/media/image/2020-12/iStock-1212779887-test-antigenique-achetee.jpg?h=945fa87b&itok=T9WxJXhS)
 
 ## 2nd part: 
 
