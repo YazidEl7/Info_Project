@@ -35,7 +35,7 @@ graph TD;
     J --> |No| K[Insert the user in Users];
     C --> L{Computer exist in Info?};
     L --> |Yes| M[Update Info & Insert Into Track];
-    L --> |No| M[Insert into Info & Track];
+    L --> |No| N[Insert into Info & Track];
     B ---->|No| E[Insert in Info & Track];
 ```
 
