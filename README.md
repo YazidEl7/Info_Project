@@ -50,7 +50,7 @@ in order to make a table of users that logged plus a few other details.
 
 ![login-page](/assets/images/login.jpg)
 ### Home page:
-Contains current users on each computer.
+Contains current users on each computer.<br/>
 Notice : when you click on a row it shows you every user that has logged in to that computer !
 
 ![computers](/assets/images/COMPUTERS.jpg)
@@ -60,7 +60,7 @@ Notice : when you click on a row it shows you every user that has logged in to t
 ![logs](/assets/images/LOGS.jpg)
 
 ### Users History:
-it keeps track of every computer a user has logged on to and when was that exactly.
+it keeps track of every computer a user has logged on to and when was that exactly.<br/>
 Notice : when you click on a row it shows you every computer that that user has logged on to before !
 
 ![Users-History](/assets/images/USERS_HISTORY.jpg)
