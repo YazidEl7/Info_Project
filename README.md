@@ -9,10 +9,13 @@ the 2nd part contains a Django app that’ll access that database and get data i
 
 ```mermaid
 graph TD;
-    A-->B;
-    A-->C;
-    B-->D;
-    C-->D;
+    /Info_Project-->/Server_Main.py;
+    /Info_Project-->/Server;
+    /Server-->/Client_Class.py;
+    /Server-->/db_init_connection.py;
+    /Server-->/Sender_Receiver.py;
+    /Info_Project-->/HelpSelf;
+    /HelpSelf-->/comp-info.sqlite3;
 ```
 
 * /Info_Project/Server_Main.py
