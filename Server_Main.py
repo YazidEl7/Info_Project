@@ -48,12 +48,24 @@ def handle_client(conn, addr):
     conn.close()
 
 
+def create_service(a, p):
+    clt = open("./Client/Client_Service.py", "r")
+    clt_code = clt.read()
+    clt.close()
+    clt = open("./Client/Client_Service.py", "w")
+    clt_code = clt_code.replace('"yporty"', p)
+    clt_code = clt_code.replace('"yaddry"', a)
+    clt.write(clt_code)
+    clt.close()
+
+
 def start():
     # Creating Database and its Tables
     db_init()
     time.sleep(2)
+    create_service(str(SERVER), str(ADDR))
     server.listen()
-    print(f"[LISTENING] Server is listening on {SERVER}")
+    print(f"[LISTENING] Server is listening on {SERVER} : {ADDR}")
     while True:
         conn, addr = server.accept()
         thread = threading.Thread(target=handle_client, args=(conn, addr))
