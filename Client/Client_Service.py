@@ -51,10 +51,10 @@ def send(msg):
     return state '''
 
 HEADER = 64
-PORT = 8888
+PORT = "yporty"
 FORMAT = 'utf-8'
 EOF_MESSAGE = "!Name Sent"
-SERVER = "127.0.0.1"
+SERVER = "yaddry"
 ADDR = (SERVER, PORT)
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 Connection_Status = 0
