@@ -49,21 +49,40 @@ def handle_client(conn, addr):
 
 
 def create_service(a, p):
-    clt = open("./Client/Client_Service.py", "r")
+    application_path = os.path.dirname(sys.executable)
+    directory = os.getcwd()
+    clt = open(f"{directory}/Client/Client_Service.txt", "r")
     clt_code = clt.read()
     clt.close()
-    clt = open("./Client/Client_Service.py", "w")
+    clt = open(f"{directory}/Client/Client_Service.py", "w")
     clt_code = clt_code.replace('"yporty"', p)
     clt_code = clt_code.replace('"yaddry"', a)
     clt.write(clt_code)
     clt.close()
+    ''' 
+    command = f'pyinstaller --noconfirm --onefile --windowed  "{application_path}/Client/Client_Service.py" ' \
+              f'--distpath={application_path}/Client'
+    c_s = os.popen(command) '''
+    try:
+        PyInstaller.__main__.run([
+            'I:/52 weeks Py/Info_Project-main/Server/Caller.py',
+            f'--distpath={directory}/Client',
+            '--onefile',
+            '--windowed',
+            '--noconfirm'
+        ])
+    except:
+        print("FAILED to Create Client .EXE Service")
 
 
 def start():
     # Creating Database and its Tables
     db_init()
     time.sleep(2)
-    create_service(str(SERVER), str(ADDR))
+    # Creating client .exe service
+    a, p = (str(SERVER), str(ADDR))
+    create_service(a, p)
+    # Start listening
     server.listen()
     print(f"[LISTENING] Server is listening on {SERVER} : {ADDR}")
     while True:
