@@ -77,6 +77,14 @@ def checkdb(received_name):
     #
 
 
+def db_update_status():
+    # Connecting to DataBase
+    curse, conn_db = db_conn()
+    curse.execute('''Update IPees set Status = 0''')
+    # Closing Connection to DataBase
+    db_close_conn(conn_db)
+
+    
 def db_insert(client_instance):
     # Connecting to DataBase
     curse, conn_db = db_conn()
