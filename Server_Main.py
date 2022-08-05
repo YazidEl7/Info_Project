@@ -85,12 +85,24 @@ def start():
     # Start listening
     server.listen()
     print(f"[LISTENING] Server is listening on {SERVER} : {ADDR}")
+    
+    # Experimental 1
+    start_m = int(datetime.now().strftime("%M"))
+    start_d = int(datetime.now().strftime("%d"))
     while True:
+        comp_m = int(datetime.now().strftime("%M"))
+        comp_d = int(datetime.now().strftime("%d"))
+
+        if comp_m >= (start_m+3) or comp_d > start_d:
+            start_m = int(datetime.now().strftime("%M"))
+            db_update_status()
+        # elif comp_m < (start_m+3):
         conn, addr = server.accept()
         thread = threading.Thread(target=handle_client, args=(conn, addr))
         thread.start()
+
         print(f"[ACTIVE CONNECTIONS] {threading.activeCount() - 1}")
-
-
+    # End Experimental 1
+    
 print("[STARTING] server is starting...")
 start()
