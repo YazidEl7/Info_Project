@@ -1,9 +1,9 @@
 import socket
 import time
 import threading
-from db_init_connection import db_init, db_insert, db_update, checkdb, db_update_status
-from Client_Class import Info
-from Sender_Receiver import receive_info, receive_name
+from Server.db_init_connection import db_init, db_insert, db_update, checkdb, db_update_status
+from Server.Client_Class import Info
+from Server.Sender_Receiver import receive_info, receive_name
 import os
 import sys
 import PyInstaller.__main__
@@ -90,7 +90,7 @@ def start():
     # Start listening
     server.listen()
     print(f"[LISTENING] Server is listening on {SERVER} : {ADDR}")
-    
+
     # Experimental 1
     start_m = int(datetime.now().strftime("%M"))
     start_d = int(datetime.now().strftime("%d"))
@@ -98,7 +98,7 @@ def start():
         comp_m = int(datetime.now().strftime("%M"))
         comp_d = int(datetime.now().strftime("%d"))
 
-        if comp_m >= (start_m+3) or comp_d > start_d:
+        if comp_m >= (start_m + 3) or comp_d > start_d:
             start_m = int(datetime.now().strftime("%M"))
             db_update_status()
         # elif comp_m < (start_m+3):
@@ -108,6 +108,7 @@ def start():
 
         print(f"[ACTIVE CONNECTIONS] {threading.activeCount() - 1}")
     # End Experimental 1
-    
+
+
 print("[STARTING] server is starting...")
 start()
