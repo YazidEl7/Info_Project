@@ -1,11 +1,12 @@
 {% extends "HelpInfo/index.html" %}
 
+
 {% block content %}
     {% if not user.is_authenticated %}
 
-    <h2 class="login-title">Log In</h2>
         <form method="post">
             {% csrf_token %}
+            <h2 class="login-title">Log In</h2>
             <table class="login">
                 <tr>
                     <td>{{ form.username.label_tag }}</td>
@@ -22,6 +23,7 @@
             </table>
 
         </form>
+
 
     {% endif %}
 {% endblock %}
