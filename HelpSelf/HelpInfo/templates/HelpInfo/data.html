@@ -16,9 +16,9 @@
             <td class="data-data">{{i.comp.comp_name}}</td>
             <td class="data-data">{{i.user.user}}</td>
                 {% if i.status.status == 1 %}
-                    <td class="data-data">Up</td>
+                    <td class="data-data"><ul><li class="status green"></li></ul></td>
                     {% elif i.status.status == 0 %}
-                        <td class="data-data">Down</td>
+                        <td class="data-data"><ul><li class="status orange"></li></ul></td>
                 {% endif %}
             <td class="data-data">{{i.ip.ip}}</td>
             <td class="data-data">{{i.logged_on}}</td>
