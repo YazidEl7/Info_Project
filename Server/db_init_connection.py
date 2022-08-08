@@ -9,6 +9,18 @@ from datetime import datetime
 # Info fields : Computer Name, Username, IP, Status
 
 
+''' ## cd .. ##
+def dbpath():
+    s = os.getcwd().split('\\')
+    s.pop(-1)
+    pt = ''
+    for i in s:
+        pt = pt + i + '/'
+    pt = pt + "HelpSelf/comp-info.sqlite3"
+    return pt
+'''
+
+
 def db_init():
     conn = sqlite3.connect('./HelpSelf/comp-info.sqlite3')
     cur = conn.cursor()
@@ -45,7 +57,7 @@ def db_init():
 
 
 def db_conn():
-    conn_db = sqlite3.connect('comp-info.sqlite')
+    conn_db = sqlite3.connect('./HelpSelf/comp-info.sqlite3')
     curse = conn_db.cursor()
     return curse, conn_db
 
@@ -81,6 +93,7 @@ def db_update_status():
     # Connecting to DataBase
     curse, conn_db = db_conn()
     curse.execute('''Update IPees set Status = 0''')
+    conn_db.commit()
     # Closing Connection to DataBase
     db_close_conn(conn_db)
 
