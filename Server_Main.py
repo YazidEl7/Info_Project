@@ -90,18 +90,27 @@ def start():
     # Start listening
     server.listen()
     print(f"[LISTENING] Server is listening on {SERVER} : {ADDR}")
-
+    
     # Experimental 1
-    start_m = int(datetime.now().strftime("%M"))
-    start_d = int(datetime.now().strftime("%d"))
+    def check_st():
+        threading.Timer(177.5, check_st).start()
+        print('Updating IP status to down')
+        db_update_status()
+
+    # start_m = int(datetime.now().strftime("%M"))
+    # start_d = int(datetime.now().strftime("%d"))
+    check_st()
     while True:
+
+        '''
         comp_m = int(datetime.now().strftime("%M"))
         comp_d = int(datetime.now().strftime("%d"))
-
         if comp_m >= (start_m + 3) or comp_d > start_d:
             start_m = int(datetime.now().strftime("%M"))
             db_update_status()
         # elif comp_m < (start_m+3):
+        '''
+        print('waiting for new connection to accept')
         conn, addr = server.accept()
         thread = threading.Thread(target=handle_client, args=(conn, addr))
         thread.start()
