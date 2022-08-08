@@ -1,5 +1,6 @@
 import sqlite3
 from datetime import datetime
+import os
 
 # database name : comp-info.sqlite, contains 4 tables
 # Tables : IPees, Computers, Users, Info
