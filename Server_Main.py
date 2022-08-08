@@ -10,8 +10,8 @@ import PyInstaller.__main__
 from datetime import datetime
 
 HEADER = 64
-PORT = 8888
-SERVER = "127.0.0.1"
+PORT = 60006
+SERVER = socket.gethostbyname(socket.gethostname())
 ADDR = (SERVER, PORT)
 
 FORMAT = 'utf-8'
