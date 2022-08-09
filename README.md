@@ -47,7 +47,7 @@ graph TD;
     J --> |No| K[Insert the user in Users];
     J --> |Yes| O{User Belongs to same domain?};
     O --> |No| P[Insert user];
-    C --> L{Computer exist in Info?};
+    C --> L{Computer Id exist in Info?};
     L --> |Yes| M[Update Info & Insert Into Track];
     L --> |No| N[Insert into Info & Track];
     B ---->|No| E[Insert in Info & Track];
