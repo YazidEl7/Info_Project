@@ -35,10 +35,10 @@ graph TD;
 **db_init_connection.py** : A bit of what happens.
 ```mermaid
 graph TD;
-    A[ComputerName] --> B{Exist in DB?};
+    A[SerialNumber] --> B{Exist in DB?};
     B -->|Yes| C[Update];
-    C --> D{serial in Info is the serial received?};
-    D --> |No| F[Insert the name in Computers];
+    C --> D{ComputerName in Info is the ComputerName received?};
+    D --> |No| F[Update the ComputerName in Computers];
     C --> G{Received IP exist?};
     G --> |No| H[Insert the IP in IPees];
     G --> |Yes| I[Insert the IP in IPees];
