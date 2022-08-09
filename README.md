@@ -23,6 +23,7 @@ graph TD;
     /Info_Project-->/Server;
     /Info_Project-->/Client;
     /Client-->/Client_Service.py;
+    /Client-->/Client_Service.txt;
     /Server-->/Client_Class.py;
     /Server-->/db_init_connection.py;
     /Server-->/Sender_Receiver.py;
