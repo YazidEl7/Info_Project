@@ -45,6 +45,8 @@ graph TD;
     G --> |Yes| I[Insert the IP in IPees];
     C --> J{Received User exist?};
     J --> |No| K[Insert the user in Users];
+    J --> |Yes| H{User Belongs to same domain?};
+    H --> |No| I[Insert user];
     C --> L{Computer exist in Info?};
     L --> |Yes| M[Update Info & Insert Into Track];
     L --> |No| N[Insert into Info & Track];
