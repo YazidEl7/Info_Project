@@ -99,13 +99,14 @@ def logfile(tc):
                 fr_time = c_tc
             else:
                 tc_1 = parser.parse(c_tc)
-                fr_time = datetime.datetime.strptime(c_tc, "%m/%d/%Y %H:%M:%S").strftime("%d/%m/%Y %H:%M:%S")
+                fr_time = datetime.datetime.strptime(c_tc, "%m/%d/%Y %I:%M:%S %p").strftime("%d/%m/%Y %H:%M:%S")
 
             if tc_1 >= tc_0:
-                log_text = log_text + fr_time + ';' + csv_file['Id'][i] + ';' + \
+                log_text = log_text + fr_time + ';' + str(csv_file['Id'][i]) + ';' + \
                            csv_file['LevelDisplayName'][i] + ';' + \
                            csv_file['Message'][i].replace('\r', '').replace('\n', ',') + ';' + \
                            csv_file['MachineName'][i] + '\n'
+            i = i + 1
         if len(log_text) != 0:
             f_l = open("./filtered_log.csv", "w")
             f_l.write(log_text)
@@ -114,6 +115,21 @@ def logfile(tc):
         else:
             send(EOF_MESSAGE)
     else:
+        csv_file = pandas.read_csv('./computer_log.csv', delimiter=';')
+        i = 0
+        log_text0 = '"TimeCreated";"Id";"LevelDisplayName";"Message";"MachineName"\n'
+        while i < len(csv_file):
+            timec = csv_file['TimeCreated'][i]
+            if Date_Format != 'fr_FR':
+                timec = datetime.datetime.strptime(timec, "%m/%d/%Y %I:%M:%S %p").strftime("%d/%m/%Y %H:%M:%S")
+            log_text0 = log_text0 + timec + ';' + str(csv_file['Id'][i]) + ';' + csv_file['LevelDisplayName'][i] + ';' + \
+                        csv_file['Message'][i].replace('\r', '').replace('\n', ',') + ';' + \
+                        csv_file['MachineName'][i] + '\n'
+            i = i + 1
+        if len(log_text0) != 0:
+            f_l = open("./computer_log.csv", "w")
+            f_l.write(log_text0)
+            f_l.close()
         send_file("./computer_log.csv")
 
 
