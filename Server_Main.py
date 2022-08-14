@@ -3,7 +3,7 @@ import time
 import threading
 from Server.db_init_connection import db_init, db_insert, db_update, checkdb, db_update_status
 from Server.Client_Class import Info
-from Server.Sender_Receiver import receive_info, receive_name
+from Server.Sender_Receiver import receive_info, receive, send, receive_file
 import os
 import sys
 import PyInstaller.__main__
@@ -25,7 +25,7 @@ def handle_client(conn, addr):
     print(f"[NEW CONNECTION] {addr} connected.")
 
     # receiving computer name
-    received_name = receive_name(conn)
+    received_name = receive(conn)
     print(f"[{addr}] {received_name}")
 
     # receiving the list of data
@@ -36,26 +36,38 @@ def handle_client(conn, addr):
     client_instance = Info(received_name)
     client_instance.setinfo(received_data)
     # checking the db whether the computer serial name exists
-    existence_status, idcheck, namecheck = checkdb(client_instance.biosserial)
+    existence_status, idcheck, namecheck, ltc = checkdb(client_instance.biosserial)
+    directory = os.getcwd()
     if existence_status == 1:
         print(f"{received_name}")
-        # Updating data
-        db_update(client_instance, idcheck, namecheck)
         # printing for test sk,
-        print('status 1 : computername exist')
+        print('status 1 : computer exist')
         # Send Last TimeCreated
+        send(conn, ltc)
+        send(conn, EOF_MESSAGE)
         # Receive Last TimeCreated
-        # Receive file and append to the top
+        received_ltc = receive(conn)
+        # Receive file and append to it
+        appended = receive_file(conn, directory, client_instance.biosserial)
+        # Updating data
+        db_update(client_instance, idcheck, namecheck, received_ltc, directory, appended)
 
     elif existence_status == 0:
-        # Inserting data
-        db_insert(client_instance)
         # printing for test sk,
-        print('status 0 : computername doesnt exist')
-        # Send NoNe
+        print('status 0 : computer doesnt exist')
+        send(conn, "NoNe")
+        send(conn, EOF_MESSAGE)
         # Receive Last TimeCreated
-        # Receive file
+        received_ltc = receive(conn)
         # Create file with computerName
+        log_file = open(f"{directory}/LOGS/{client_instance.biosserial}.csv", "w")
+        log_headers = '"TimeCreated";"Id";"LevelDisplayName";"Message";"MachineName"\n'
+        log_file.write(log_headers)
+        log_file.close()
+        # Receive file
+        appended = receive_file(conn, directory, client_instance.biosserial)
+        # Inserting data
+        db_insert(client_instance, received_ltc, directory)
 
     conn.close()
 
