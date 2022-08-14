@@ -10,8 +10,8 @@ import PyInstaller.__main__
 from datetime import datetime
 
 HEADER = 64
-PORT = 8888
-SERVER = "127.0.0.1"
+PORT = 60006
+SERVER = socket.gethostbyname(socket.gethostname())
 ADDR = (SERVER, PORT)
 
 FORMAT = 'utf-8'
@@ -27,8 +27,6 @@ def handle_client(conn, addr):
     # receiving computer name
     received_name = receive_name(conn)
     print(f"[{addr}] {received_name}")
-    # checking the db whether the computer name exists
-    existence_status = checkdb(received_name)
 
     # receiving the list of data
     received_data = receive_info(conn)
@@ -37,18 +35,27 @@ def handle_client(conn, addr):
     # Instantiating the class now for test reasons
     client_instance = Info(received_name)
     client_instance.setinfo(received_data)
+    # checking the db whether the computer serial name exists
+    existence_status, idcheck, namecheck = checkdb(client_instance.biosserial)
     if existence_status == 1:
         print(f"{received_name}")
         # Updating data
-        db_update(client_instance)
+        db_update(client_instance, idcheck, namecheck)
         # printing for test sk,
         print('status 1 : computername exist')
+        # Send Last TimeCreated
+        # Receive Last TimeCreated
+        # Receive file and append to the top
 
     elif existence_status == 0:
         # Inserting data
         db_insert(client_instance)
         # printing for test sk,
         print('status 0 : computername doesnt exist')
+        # Send NoNe
+        # Receive Last TimeCreated
+        # Receive file
+        # Create file with computerName
 
     conn.close()
 
@@ -85,23 +92,33 @@ def start():
     db_init()
     time.sleep(2)
     # Creating client .exe service
-    a, p = (str(SERVER), str(ADDR))
-    create_service(a, p)
+    a = str(SERVER)
+    p = str(ADDR)
+    # create_service(a, p)
     # Start listening
     server.listen()
     print(f"[LISTENING] Server is listening on {SERVER} : {ADDR}")
 
     # Experimental 1
-    start_m = int(datetime.now().strftime("%M"))
-    start_d = int(datetime.now().strftime("%d"))
+    def check_st():
+        threading.Timer(177.5, check_st).start()
+        print('Updating IP status to down')
+        db_update_status()
+
+    # start_m = int(datetime.now().strftime("%M"))
+    # start_d = int(datetime.now().strftime("%d"))
+    check_st()
     while True:
+
+        '''
         comp_m = int(datetime.now().strftime("%M"))
         comp_d = int(datetime.now().strftime("%d"))
-
         if comp_m >= (start_m + 3) or comp_d > start_d:
             start_m = int(datetime.now().strftime("%M"))
             db_update_status()
         # elif comp_m < (start_m+3):
+        '''
+        print('waiting for new connection to accept')
         conn, addr = server.accept()
         thread = threading.Thread(target=handle_client, args=(conn, addr))
         thread.start()

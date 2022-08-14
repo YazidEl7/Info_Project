@@ -1,12 +1,13 @@
 import sqlite3
 from datetime import datetime
 
-# database name : comp-info.sqlite, contains 4 tables
+# database name : comp-info.sqlite, contains 5 tables
 # Tables : IPees, Computers, Users, Info
 # IPees fields : IP, Status(up\down)
 # Computers fields : Bios serial number, Computer Name. Both fields are Unique
 # Users fields : Users, domain
-# Info fields : Computer Name, Username, IP, Status
+# Info fields : Computer Name, Username, IP, Status, Logged_On
+# Track fields : Computer Name, Username, IP, Status, Logged_On
 
 
 def db_init():
@@ -45,7 +46,7 @@ def db_init():
 
 
 def db_conn():
-    conn_db = sqlite3.connect('comp-info.sqlite')
+    conn_db = sqlite3.connect('./HelpSelf/comp-info.sqlite3')
     curse = conn_db.cursor()
     return curse, conn_db
 
@@ -56,23 +57,25 @@ def db_close_conn(conn_db):
     #
 
 
-def checkdb(received_name):
+def checkdb(received_biosserial):
     # Connecting to DataBase
     curse, conn_db = db_conn()
     # checking whether the computer is already registered
     namecheck = ''
+    idcheck = ''
     existence_status = 0
     try:
-        curse.execute("SELECT Comp_Name FROM Computers WHERE Comp_Name = ?", (received_name,))
+        curse.execute("SELECT Id, Comp_Name FROM Computers WHERE BIOS_Serial = ?", (received_biosserial,))
         row = curse.fetchone()
-        namecheck = row[0]
-        if received_name == namecheck:
+        if row is not None:
+            idcheck = row[0]
+            namecheck = row[1]
             existence_status = 1
     except:
         existence_status = 0
     # Closing Connection to DataBase
     db_close_conn(conn_db)
-    return existence_status
+    return existence_status, idcheck, namecheck
 
     #
 
@@ -81,10 +84,11 @@ def db_update_status():
     # Connecting to DataBase
     curse, conn_db = db_conn()
     curse.execute('''Update IPees set Status = 0''')
+    conn_db.commit()
     # Closing Connection to DataBase
     db_close_conn(conn_db)
 
-    
+
 def db_insert(client_instance):
     # Connecting to DataBase
     curse, conn_db = db_conn()
@@ -121,18 +125,19 @@ def db_search(to_be_searched, choice):
     checkl = ''
     found = 0
     try:
-        if choice == 1:
-            curse.execute('''SELECT Id, Comp_Name FROM Computers WHERE BIOS_Serial = ?''', (to_be_searched,))
-        elif choice == 2:
+        # if choice == 1:
+        # curse.execute('''SELECT Id, Comp_Name FROM Computers WHERE BIOS_Serial = ?''', (to_be_searched,))
+        if choice == 2:
             curse.execute('''SELECT Id, Status FROM IPees WHERE IP = ?''', (to_be_searched,))
         elif choice == 3:
             curse.execute('''SELECT Id, Domain FROM Users WHERE User = ?''', (to_be_searched,))
         elif choice == 4:
             curse.execute('''SELECT Id, Logged_On FROM Info WHERE Comp_Id = ?''', (to_be_searched,))
         row = curse.fetchone()
-        check = row[0]
-        checkl = row[1]
-        found = 1
+        if row is not None:
+            check = row[0]
+            checkl = row[1]
+            found = 1
     except:
         found = 0
     # Closing Connection to DataBase
@@ -140,21 +145,20 @@ def db_search(to_be_searched, choice):
     return found, check, checkl
 
 
-def db_update(client_instance):
+def db_update(client_instance, c1, cl):
     # Connecting to DataBase
     curse, conn_db = db_conn()
 
-    f1, c1, cl = db_search(client_instance.biosserial, 1)
-    print(f"c1 : {c1} {type(c1)}, bios {client_instance.biosserial} {type(client_instance.biosserial)}")
-    if len(str(cl)) < 1:
-        curse.execute(''' INSERT INTO Computers(BIOS_Serial,Comp_Name) VALUES(?,?) ''',
-                      (client_instance.biosserial, client_instance.computername))
+    # print(f"c1 : {c1} {type(c1)}, bios {client_instance.biosserial} {type(client_instance.biosserial)}")
+    if cl != client_instance.computername:
+        # print(f"this is cl {cl} {type(cl)} this is coming {client_instance.computername} c1 {c1} {type(c1)}")
+        curse.execute('''UPDATE Computers SET Comp_Name = ? WHERE Id = ?''', (client_instance.computername, c1))
         conn_db.commit()
-        c1 = curse.lastrowid
 
     f2, c2, cl = db_search(client_instance.address, 2)
-    if len(str(cl)) >= 1:
-        curse.execute('''Update IPees set Status = 1 where id = ?''', (c2,))
+    if f2 == 1:
+        curse.execute('''UPDATE IPees SET Status = 1 WHERE Id = ?''', (c2,))
+        conn_db.commit()
     else:
         curse.execute(''' INSERT INTO IPees(IP,Status) VALUES(?,?) ''',
                       (client_instance.address, client_instance.status))
@@ -162,19 +166,19 @@ def db_update(client_instance):
         c2 = curse.lastrowid
 
     f3, c3, cl = db_search(client_instance.username, 3)
-    if len(str(cl)) < 1:
+    if f3 != 1 or cl != client_instance.domain:
         curse.execute(''' INSERT INTO Users(User,Domain) VALUES(?,?) ''',
                       (client_instance.username, client_instance.domain))
         conn_db.commit()
         c3 = curse.lastrowid
     updated_on = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     f4, c4, cl = db_search(c1, 4)
-    if len(str(cl)) >= 1:
+    if f4 == 1:
         curse.execute(''' INSERT INTO Track(Comp_Track,User_Track,IP_Track,Status_Track,Logged_On_Track) 
         VALUES(?,?,?,?,?) ''', (c1, c3, c2, c2, updated_on))
         conn_db.commit()
-        curse.execute('''Update Info set Comp_Id = ?, User_Id = ?, IP_Id = ?, Status_Id = ? , Logged_On = ? 
-        where id = ?''', (c1, c3, c2, c2, updated_on, c4))
+        curse.execute('''Update Info SET Comp_Id = ?, User_Id = ?, IP_Id = ?, Status_Id = ? , Logged_On = ? 
+        WHERE id = ?''', (c1, c3, c2, c2, updated_on, c4))
         conn_db.commit()
     else:
         curse.execute(''' INSERT INTO Track(Comp_Track,User_Track,IP_Track,Status_Track,Logged_On_Track) 
