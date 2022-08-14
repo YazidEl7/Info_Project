@@ -38,10 +38,9 @@ def receive_file(conn, directory, serial):
         if msg_length:
             msg_length = int(msg_length)
             msg = conn.recv(msg_length).decode(FORMAT)
-            msgg += msg + '\n'
+            msgg += msg
             if msg == EOF_MESSAGE:
-                eof_m = EOF_MESSAGE + '\n'
-                msgg = msgg.replace(eof_m, '')
+                msgg = msgg.replace(EOF_MESSAGE, '')
                 connected = False
     if len(msgg) != 0:
         log_file = open(f"{directory}/LOGS/{serial}.csv", "a")
