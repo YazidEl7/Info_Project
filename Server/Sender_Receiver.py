@@ -1,7 +1,7 @@
 
 HEADER = 64
 FORMAT = 'utf-8'
-EOF_MESSAGE = "!Name Sent"
+EOF_MESSAGE = "! Sent"
 
 
 def send(conn, mesg):
@@ -15,7 +15,7 @@ def send(conn, mesg):
 
 #
 
-def receive_name(conn):
+def receive(conn):
     msgg = ''
     connected = True
     while connected:
@@ -28,6 +28,28 @@ def receive_name(conn):
                 msgg = msgg.replace(EOF_MESSAGE, '')
                 connected = False
     return msgg
+
+
+def receive_file(conn, directory, serial):
+    msgg = ''
+    connected = True
+    while connected:
+        msg_length = conn.recv(HEADER).decode(FORMAT)
+        if msg_length:
+            msg_length = int(msg_length)
+            msg = conn.recv(msg_length).decode(FORMAT)
+            msgg += msg + '\n'
+            if msg == EOF_MESSAGE:
+                eof_m = EOF_MESSAGE + '\n'
+                msgg = msgg.replace(eof_m, '')
+                connected = False
+    if len(msgg) != 0:
+        log_file = open(f"{directory}/LOGS/{serial}.csv", "a")
+        log_file.write(msgg)
+        log_file.close()
+        return 1
+    else:
+        return 0
 
 
 #
