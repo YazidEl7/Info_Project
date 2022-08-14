@@ -4,7 +4,7 @@ from datetime import datetime
 # database name : comp-info.sqlite, contains 5 tables
 # Tables : IPees, Computers, Users, Info
 # IPees fields : IP, Status(up\down)
-# Computers fields : Bios serial number, Computer Name. Both fields are Unique
+# Computers fields : Bios serial number, Computer Name, Last_TimeCreated, CsvLog. Both fields are Unique
 # Users fields : Users, domain
 # Info fields : Computer Name, Username, IP, Status, Logged_On
 # Track fields : Computer Name, Username, IP, Status, Logged_On
@@ -18,8 +18,8 @@ def db_init():
     (Id INTEGER NOT NULL, IP Text, Status INTEGER, UNIQUE(Id,IP), PRIMARY KEY("Id" AUTOINCREMENT))''')
     cur.execute('''
     CREATE TABLE IF NOT EXISTS Computers
-    (Id INTEGER NOT NULL, BIOS_Serial TEXT, Comp_Name TEXT, UNIQUE(Id,BIOS_Serial,Comp_Name), 
-    PRIMARY KEY("Id" AUTOINCREMENT))''')
+    (Id INTEGER NOT NULL, BIOS_Serial TEXT, Comp_Name TEXT, Last_TimeCreated TEXT, Csv_Log BLOB, 
+    UNIQUE(Id,BIOS_Serial,Comp_Name), PRIMARY KEY("Id" AUTOINCREMENT))''')
     cur.execute('''
     CREATE TABLE IF NOT EXISTS Users
     (Id INTEGER NOT NULL UNIQUE, User TEXT, Domain TEXT, PRIMARY KEY("Id" AUTOINCREMENT))''')
@@ -57,25 +57,35 @@ def db_close_conn(conn_db):
     #
 
 
+def convert_to_binary(filename):
+    # Convert digital data to binary format
+    with open(filename, 'rb') as file:
+        blob_data = file.read()
+    return blob_data
+
+
 def checkdb(received_biosserial):
     # Connecting to DataBase
     curse, conn_db = db_conn()
     # checking whether the computer is already registered
     namecheck = ''
     idcheck = ''
+    ltc = ''
     existence_status = 0
     try:
-        curse.execute("SELECT Id, Comp_Name FROM Computers WHERE BIOS_Serial = ?", (received_biosserial,))
+        curse.execute("SELECT Id, Comp_Name, Last_TimeCreated FROM Computers WHERE BIOS_Serial = ?",
+                      (received_biosserial,))
         row = curse.fetchone()
         if row is not None:
             idcheck = row[0]
             namecheck = row[1]
+            ltc = row[2]
             existence_status = 1
     except:
         existence_status = 0
     # Closing Connection to DataBase
     db_close_conn(conn_db)
-    return existence_status, idcheck, namecheck
+    return existence_status, idcheck, namecheck, ltc
 
     #
 
@@ -89,13 +99,15 @@ def db_update_status():
     db_close_conn(conn_db)
 
 
-def db_insert(client_instance):
+def db_insert(client_instance, received_ltc, directory):
     # Connecting to DataBase
     curse, conn_db = db_conn()
+    path = directory + "/LOGS/" + client_instance.biosserial + ".csv"
+    b_data = convert_to_binary(path)
     # not registered before 2
     #   inserting data
-    curse.execute(''' INSERT INTO Computers(BIOS_Serial,Comp_Name) VALUES(?,?) ''',
-                  (client_instance.biosserial, client_instance.computername))
+    curse.execute(''' INSERT INTO Computers(BIOS_Serial,Comp_Name,Last_TimeCreated,Csv_Log) VALUES(?,?,?,?) ''',
+                  (client_instance.biosserial, client_instance.computername, received_ltc, b_data))
     conn_db.commit()
     comp_id = curse.lastrowid
     curse.execute(''' INSERT INTO Users(User,Domain) VALUES(?,?) ''',
@@ -145,9 +157,16 @@ def db_search(to_be_searched, choice):
     return found, check, checkl
 
 
-def db_update(client_instance, c1, cl):
+def db_update(client_instance, c1, cl, received_ltc, directory, appended):
     # Connecting to DataBase
     curse, conn_db = db_conn()
+    path = directory + "/LOGS/" + client_instance.biosserial + ".csv"
+    b_data = convert_to_binary(path)
+    curse.execute('''UPDATE Computers SET Last_TimeCreated = ? WHERE Id = ?''', (received_ltc, c1))
+    conn_db.commit()
+    if appended == 1:
+        curse.execute('''UPDATE Computers SET Csv_Log = ? WHERE Id = ?''', (b_data, c1))
+        conn_db.commit()
 
     # print(f"c1 : {c1} {type(c1)}, bios {client_instance.biosserial} {type(client_instance.biosserial)}")
     if cl != client_instance.computername:
