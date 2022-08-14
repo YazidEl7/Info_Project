@@ -1,1 +1,1 @@
-#Received Microsoft-Windows-TerminalServices-LocalSessionManager Logs
+# Received Microsoft-Windows-TerminalServices-LocalSessionManager Logs
