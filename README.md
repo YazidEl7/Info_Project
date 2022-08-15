@@ -20,6 +20,7 @@ the 2nd part contains a Django app that’ll access that database and get data i
 ```mermaid
 graph TD;
     /Info_Project-->/Server_Main.py;
+    /Info_Project-->/LOGS;
     /Info_Project-->/Server;
     /Info_Project-->/Client;
     /Client-->/Client_Service.py;
