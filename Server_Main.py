@@ -11,7 +11,8 @@ from datetime import datetime
 
 HEADER = 64
 PORT = 60006
-SERVER = socket.gethostbyname(socket.gethostname())
+# SERVER = socket.gethostbyname(socket.gethostname())
+SERVER = "127.0.0.1"
 ADDR = (SERVER, PORT)
 
 FORMAT = 'utf-8'
@@ -27,9 +28,14 @@ def handle_client(conn, addr):
     # receiving computer name
     received_name = receive(conn)
     print(f"[{addr}] {received_name}")
-
+    print(conn)
     # receiving the list of data
     received_data = receive_info(conn)
+    # receiving OS info
+    os_info = ''
+    os_r = int(receive(conn))
+    if os_r == 1:
+        os_info = receive_info(conn)
     # printing for test sk,
     print(f"Received data : {received_data}")
     # Instantiating the class now for test reasons
@@ -38,36 +44,43 @@ def handle_client(conn, addr):
     # checking the db whether the computer serial name exists
     existence_status, idcheck, namecheck, ltc = checkdb(client_instance.biosserial)
     directory = os.getcwd()
+
+    received_ltc = ''
+    appended = 0
     if existence_status == 1:
         print(f"{received_name}")
         # printing for test sk,
         print('status 1 : computer exist')
-        # Send Last TimeCreated
-        send(conn, ltc)
-        send(conn, EOF_MESSAGE)
-        # Receive Last TimeCreated
-        received_ltc = receive(conn)
-        # Receive file and append to it
-        appended = receive_file(conn, directory, client_instance.biosserial)
+        log_r = int(receive(conn))
+        if log_r == 1:
+            # Send Last TimeCreated
+            send(conn, ltc)
+            send(conn, EOF_MESSAGE)
+            # Receive Last TimeCreated
+            received_ltc = receive(conn)
+            # Receive file and append to it
+            appended = receive_file(conn, directory, client_instance.biosserial)
         # Updating data
-        db_update(client_instance, idcheck, namecheck, received_ltc, directory, appended)
+        db_update(client_instance, idcheck, namecheck, received_ltc, directory, appended, os_r, os_info)
 
     elif existence_status == 0:
         # printing for test sk,
         print('status 0 : computer doesnt exist')
-        send(conn, "NoNe")
-        send(conn, EOF_MESSAGE)
-        # Receive Last TimeCreated
-        received_ltc = receive(conn)
-        # Create file with computerName
-        log_file = open(f"{directory}/LOGS/{client_instance.biosserial}.csv", "w")
-        log_headers = '"TimeCreated";"Id";"LevelDisplayName";"Message";"MachineName"\n'
-        log_file.write(log_headers)
-        log_file.close()
-        # Receive file
-        appended = receive_file(conn, directory, client_instance.biosserial)
+        log_r = int(receive(conn))
+        if log_r == 1:
+            send(conn, "NoNe")
+            send(conn, EOF_MESSAGE)
+            # Receive Last TimeCreated
+            received_ltc = receive(conn)
+            # Create file with computerName
+            log_file = open(f"{directory}/LOGS/{client_instance.biosserial}.csv", "w")
+            log_headers = '"TimeCreated";"Id";"LevelDisplayName";"Message";"MachineName"\n'
+            log_file.write(log_headers)
+            log_file.close()
+            # Receive file
+            appended = receive_file(conn, directory, client_instance.biosserial)
         # Inserting data
-        db_insert(client_instance, received_ltc, directory)
+        db_insert(client_instance, received_ltc, directory, os_info)
 
     conn.close()
 
@@ -121,7 +134,6 @@ def start():
     # start_d = int(datetime.now().strftime("%d"))
     check_st()
     while True:
-
         '''
         comp_m = int(datetime.now().strftime("%M"))
         comp_d = int(datetime.now().strftime("%d"))
