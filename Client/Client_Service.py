@@ -6,6 +6,19 @@ import pandas
 from dateutil import parser
 import locale
 import datetime
+import platform
+
+HEADER = 64
+PORT = "yporty"
+FORMAT = 'utf-8'
+EOF_MESSAGE = "! Sent"
+SERVER = "yaddry"
+ADDR = (SERVER, PORT)
+client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+Connection_Status = 0
+Date_Format = locale.getdefaultlocale()[0]
+OTS = 1
+RS = 1
 
 
 def info():
@@ -133,39 +146,51 @@ def logfile(tc):
         send_file("./computer_log.csv")
 
 
-HEADER = 64
-PORT = "yporty"
-FORMAT = 'utf-8'
-EOF_MESSAGE = "! Sent"
-SERVER = "yaddry"
-ADDR = (SERVER, PORT)
-client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-Connection_Status = 0
-Date_Format = locale.getdefaultlocale()[0]
+def hour_plus_one():
+    v = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S").split(' ')
+    vv = v[1].split(':')
+    vv = str(int(vv[0]) + 2) + ":" + vv[1] + ":" + vv[2]
+    v = v[0] + " " + vv
+    if Date_Format == 'fr_FR':
+        co = parser.parse(v, dayfirst=True)
+    else:
+        co = parser.parse(v)
+    return co
+
+
+##########################################################################################################
+c = hour_plus_one()
 while True:
     while True:
-        #   Already registered in database wait an hour to update server info
+        if Date_Format == 'fr_FR':
+            now = parser.parse(datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S"), dayfirst=True)
+        else:
+            now = parser.parse(datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
+        #####################################################################
+        #   Already registered in database wait 3.5 minutes to update server info
         if Connection_Status == 1:
-            time.sleep(3600)
-        #   Just logged in or not yet registered in database wait 3 minutes, we'll make it 3 seconds just for tests
+            time.sleep(210)
+        #   Just logged in or not yet registered in database wait 2.5 minutes
         elif Connection_Status == 0:
-            time.sleep(180)
-
+            time.sleep(150)
+        #####################################################################
         try:
             client.connect(ADDR)
             Connection_Status = 1
         except:
             # didn't connect
             Connection_Status = 0
-
+        #####################################################################
         if Connection_Status == 0:
             break
         elif Connection_Status == 1:
+            ###########################################################
             #   First we send computer name for db registration check
             comp_name = os.environ['COMPUTERNAME']
             send(comp_name)
             #   After every sg we are required to send EOF_MESSAGE, so that server on receive could break out of loop
             send(EOF_MESSAGE)
+            ###########################################################
             # the data we'll send is a list of dictionaries
             List_to_Send = []
             try:
@@ -173,25 +198,48 @@ while True:
                 List_to_Send = info()
                 send(str(List_to_Send))
                 send(EOF_MESSAGE)
-                # Receive NoNe or Last TimeCreated
-                server_tc = receive_tc()
-                # Send Last TimeCreated or Last TimeCreated to PC Last TimeCreated
-                tc_cmd = '(Get-WinEvent -LogName "Microsoft-Windows-TerminalServices-LocalSessionManager/Operational"' \
-                         ' -MaxEvents 1).TimeCreated.ToString("dd/MM/yyyy hh:mm:ss")'
-                completed = subprocess.run(["powershell", "-Command", tc_cmd], capture_output=True)
-                send(completed.stdout.decode())
-                send(EOF_MESSAGE)
-                # we should add l8r something to control when we send the logs
-                # Create logs file
-                if server_tc == "NoNe":
-                    logfile(0)
+                ###########################################################
+                # sending OS info
+                if OTS == 1:
+                    send("1")
+                    send(EOF_MESSAGE)
+                    send(str(list(platform.uname())))
+                    send(EOF_MESSAGE)
+                    OTS = 0
                 else:
-                    logfile(server_tc)
-                # Send File
+                    send("0")
+                ###########################################################
+                if RS == 1 or now > c:
+                    send("1")
+                    send(EOF_MESSAGE)
+                    # Receive NoNe or Last TimeCreated
+                    server_tc = receive_tc()
+                    # Send Last TimeCreated or Last TimeCreated to PC Last TimeCreated
+                    tc_cmd = '(Get-WinEvent -LogName "Microsoft-Windows-TerminalServices-LocalSessionManager' \
+                             '/Operational" -MaxEvents 1).TimeCreated.ToString("dd/MM/yyyy hh:mm:ss") '
+                    completed = subprocess.run(["powershell", "-Command", tc_cmd], capture_output=True)
+                    send(completed.stdout.decode())
+                    send(EOF_MESSAGE)
+                    # we should add l8r something to control when we send the logs
+                    # Create logs file
+                    if server_tc == "NoNe":
+                        logfile(0)
+                    else:
+                        logfile(server_tc)
+                    # Send File
+                    RS = 0
+                    if now > c:
+                        c = hour_plus_one()
+                else:
+                    send("0")
+                    send(EOF_MESSAGE)
+                ###########################################################
             except:
                 # Failed sending
                 Connection_Status = 0
                 break
+            ##############################################################
             # waiting for 60 seconds before closing,
             time.sleep(60)
             client.close()
+#######################################################################################################
