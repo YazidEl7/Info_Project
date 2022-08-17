@@ -9,7 +9,7 @@ the 2nd part contains a Django app that’ll access that database and get data i
 - Still needs to be tested in restricting Environments (I tested it in a windows 10 PC with a standard user and it worked, but l8r when we pull logs too we'll have to test it again)
 - Getting ip from client doesn't always get the right interface ip.
 
- *Note* : Before utilization, change IP adress on client, port number if you want and create your own admin user on Django.
+ *Note* : Before utilization, port number if you want and create your own admin user on Django.
 
 ## 1st part: 
 
