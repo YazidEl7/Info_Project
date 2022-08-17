@@ -1,5 +1,6 @@
 import sqlite3
 from datetime import datetime
+import locale
 
 
 # database name : comp-info.sqlite, contains 5 tables
@@ -9,6 +10,15 @@ from datetime import datetime
 # Users fields : Users, domain
 # Info fields : Computer Name, Username, IP, Status, Logged_On
 # Track fields : Computer Name, Username, IP, Status, Logged_On
+Date_Format = locale.getdefaultlocale()[0]
+
+
+def to_fr_datetime():
+    if Date_Format != 'fr_FR':
+        updatedon = datetime.strptime(datetime.now().strftime("%d/%m/%Y %H:%M:%S"), "%m/%d/%Y %I:%M:%S %p").strftime("%d/%m/%Y %H:%M:%S")
+    else:
+        updatedon = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+    return updatedon
 
 
 def db_init():
@@ -119,7 +129,8 @@ def db_insert(client_instance, received_ltc, directory, os):
     curse.execute(''' INSERT INTO IPees(IP,Status) VALUES(?,?) ''', (client_instance.address, client_instance.status))
     conn_db.commit()
     ip_id = curse.lastrowid
-    updated_on = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+    updated_on = to_fr_datetime()
+
     curse.execute(''' INSERT INTO Info(Comp_Id,User_Id,IP_Id,Status_Id, Logged_On) VALUES(?,?,?,?,?) ''',
                   (comp_id, user_id, ip_id, ip_id, updated_on))
     conn_db.commit()
@@ -199,7 +210,8 @@ def db_update(client_instance, c1, cl, received_ltc, directory, appended, os_r, 
                       (client_instance.username, client_instance.domain))
         conn_db.commit()
         c3 = curse.lastrowid
-    updated_on = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+    updated_on = to_fr_datetime()
+
     f4, c4, cl = db_search(c1, 4)
     if f4 == 1:
         curse.execute(''' INSERT INTO Track(Comp_Track,User_Track,IP_Track,Status_Track,Logged_On_Track) 
