@@ -9,7 +9,7 @@ import locale
 # Computers fields : Bios serial number, Computer Name, Last_TimeCreated, CsvLog, system, release, version, machine.
 # Users fields : Users, domain
 # Info fields : Computer Name, Username, IP, Status, Logged_On
-# Track fields : Computer Name, Username, IP, Status, Logged_On
+# Track fields : Computer Name, Username, IP, Logged_On
 Date_Format = locale.getdefaultlocale()[0]
 
 
@@ -46,13 +46,11 @@ def db_init():
     # ON delete
     cur.execute('''
     CREATE TABLE IF NOT EXISTS Track
-    (Id INTEGER NOT NULL UNIQUE, Comp_Track INTEGER, User_Track INTEGER, IP_Track INTEGER, Status_Track INTEGER, 
-    Logged_On_Track TEXT,
+    (Id INTEGER NOT NULL UNIQUE, Comp_Track INTEGER, User_Track INTEGER, IP_Track INTEGER, Logged_On_Track TEXT,
     PRIMARY KEY("Id" AUTOINCREMENT), 
     FOREIGN KEY("Comp_Track") REFERENCES Computers (Id) ON DELETE CASCADE, 
     FOREIGN KEY("User_Track") REFERENCES Users (Id), 
-    FOREIGN KEY("IP_Track") REFERENCES IPees (Id), 
-    FOREIGN KEY("Status_Track") REFERENCES IPees (Id))''')
+    FOREIGN KEY("IP_Track") REFERENCES IPees (Id)''')
     conn.close()
 
 
@@ -134,8 +132,8 @@ def db_insert(client_instance, received_ltc, directory, os):
     curse.execute(''' INSERT INTO Info(Comp_Id,User_Id,IP_Id,Status_Id, Logged_On) VALUES(?,?,?,?,?) ''',
                   (comp_id, user_id, ip_id, ip_id, updated_on))
     conn_db.commit()
-    curse.execute(''' INSERT INTO Track(Comp_Track,User_Track,IP_Track,Status_Track,Logged_On_Track) 
-    VALUES(?,?,?,?,?) ''', (comp_id, user_id, ip_id, ip_id, updated_on))
+    curse.execute(''' INSERT INTO Track(Comp_Track,User_Track,IP_Track,Logged_On_Track) 
+    VALUES(?,?,?,?,?) ''', (comp_id, user_id, ip_id, updated_on))
     conn_db.commit()
     print(f"user id {user_id}")
     # Closing Connection to DataBase
@@ -214,15 +212,15 @@ def db_update(client_instance, c1, cl, received_ltc, directory, appended, os_r, 
 
     f4, c4, cl = db_search(c1, 4)
     if f4 == 1:
-        curse.execute(''' INSERT INTO Track(Comp_Track,User_Track,IP_Track,Status_Track,Logged_On_Track) 
-        VALUES(?,?,?,?,?) ''', (c1, c3, c2, c2, updated_on))
+        curse.execute(''' INSERT INTO Track(Comp_Track,User_Track,IP_Track,Logged_On_Track) 
+        VALUES(?,?,?,?,?) ''', (c1, c3, c2, updated_on))
         conn_db.commit()
         curse.execute('''Update Info SET Comp_Id = ?, User_Id = ?, IP_Id = ?, Status_Id = ? , Logged_On = ? 
         WHERE id = ?''', (c1, c3, c2, c2, updated_on, c4))
         conn_db.commit()
     else:
-        curse.execute(''' INSERT INTO Track(Comp_Track,User_Track,IP_Track,Status_Track,Logged_On_Track) 
-        VALUES(?,?,?,?,?) ''', (c1, c3, c2, c2, updated_on))
+        curse.execute(''' INSERT INTO Track(Comp_Track,User_Track,IP_Track,Logged_On_Track) 
+        VALUES(?,?,?,?,?) ''', (c1, c3, c2, updated_on))
         conn_db.commit()
         curse.execute(''' INSERT INTO Info(Comp_Id,User_Id,IP_Id,Status_Id,Logged_On) VALUES(?,?,?,?,?) ''',
                       (c1, c3, c2, c2, updated_on))
