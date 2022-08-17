@@ -30,7 +30,7 @@ def db_init():
     cur.execute('''
     CREATE TABLE IF NOT EXISTS Computers
     (Id INTEGER NOT NULL, BIOS_Serial TEXT, Comp_Name TEXT, Last_TimeCreated TEXT, Csv_Log BLOB, System TEXT, 
-    Release TEXT, Version TEXT, Machine TEXT, UNIQUE(Id,BIOS_Serial,Comp_Name), PRIMARY KEY("Id" AUTOINCREMENT))''')
+    Release TEXT, Version TEXT, Machine TEXT, UNIQUE(Id,BIOS_Serial), PRIMARY KEY("Id" AUTOINCREMENT))''')
     cur.execute('''
     CREATE TABLE IF NOT EXISTS Users
     (Id INTEGER NOT NULL UNIQUE, User TEXT, Domain TEXT, PRIMARY KEY("Id" AUTOINCREMENT))''')
