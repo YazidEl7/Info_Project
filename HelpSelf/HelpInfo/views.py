@@ -6,6 +6,19 @@ from django.utils.html import escape
 from django.http import HttpResponseRedirect, HttpRequest
 from datetime import datetime
 from django.db.models import Q
+import locale
+
+Date_Format = locale.getdefaultlocale()[0]
+
+
+# just a function used in "between"
+def to_fr_datetime():
+    if Date_Format != 'fr_FR':
+        updatedon = datetime.strptime(datetime.now().strftime("%d/%m/%Y %H:%M:%S"), "%m/%d/%Y %I:%M:%S %p").strftime(
+            "%d/%m/%Y %H:%M:%S")
+    else:
+        updatedon = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+    return updatedon
 
 
 # Create your views here.
@@ -21,14 +34,14 @@ def m(request):
 def between(request):
     if request.user.is_authenticated:
         logged = request.META
-
+        l_on = to_fr_datetime()
         l_u = open("HelpInfo/static/Dynamic/logged_users.json", "r+")
         # read_l_u = l_u.read()
         occ_count = len(l_u.readlines()) - 2
         values = f'\"USERNAME\" : \"{logged["USERNAME"]}\", ' + f'\"IP\" : \"{logged["REMOTE_ADDR"]}\", ' \
                  + f'\"Host\" : \"{logged["REMOTE_HOST"]}\", ' + f'\"USERDOMAIN\" : \"{logged["USERDOMAIN"]}\", ' \
                  + f'\"COMPUTER\" : \"{logged["COMPUTERNAME"]}\", ' + f'\"OS\" : \"{logged["OS"]}\", ' \
-                 + f'\"DATE\" : \"{datetime.now().strftime("%d/%m/%Y %H:%M:%S")}\", ' \
+                 + f'\"DATE\" : \"{l_on}\", ' \
                  + f'\"AGENT\" : \"{logged["HTTP_USER_AGENT"]}\" '
         if occ_count == 0:
             logged_user = "{" + values + "}" + "\n]"
@@ -71,6 +84,7 @@ def logs(request):
         return HttpResponseRedirect('/login/')
 
 
+# Computers fields : Bios serial number, Computer Name, Last_TimeCreated, CsvLog, system, release, version, machine.
 def users_history(request):
     if request.user.is_authenticated:
         information = Track.objects.all().order_by('-logged_on_t')  # [:5]
