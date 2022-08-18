@@ -10,6 +10,7 @@
             <th class="data-header">Status</th>
             <th class="data-header">IP</th>
             <th class="data-header">LastSync</th>
+            <th class="data-header">LocalSessionManager</th>
          </tr>
             {% for i in Computers %}
          <tr class="data-line" id="investigate" onclick="window.location.href = '/C_H/{{i.comp.comp_name}}';">
@@ -22,6 +23,7 @@
                 {% endif %}
             <td class="data-data">{{i.ip.ip}}</td>
             <td class="data-data">{{i.logged_on}}</td>
+             <td class="data-data">still testing</td>
          </tr>
             {% endfor %}
      </table>
