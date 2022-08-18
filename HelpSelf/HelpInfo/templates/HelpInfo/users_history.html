@@ -7,7 +7,7 @@
         <tr class="data-line">
             <th class="data-header">Computer Name</th>
             <th class="data-header">User Name</th>
-            <th class="data-header">Status</th>
+
             <th class="data-header">IP</th>
             <th class="data-header">LastSync</th>
          </tr>
@@ -15,11 +15,7 @@
             <tr class="data-line" id="investigate" onclick="window.location.href = '/U_H/{{i.user_t.user}}';">
                 <td class="data-data">{{i.comp_t.comp_name}}</td>
                 <td class="data-data">{{i.user_t.user}}</td>
-                    {% if i.status_t.status == 1 %}
-                        <td class="data-data"><ul><li class="status green"></li></ul></td>
-                    {% elif i.status_t.status == 0 %}
-                        <td class="data-data"><ul><li class="status orange"></li></td>
-                    {% endif %}
+
                 <td class="data-data">{{i.ip_t.ip}}</td>
                 <td class="data-data">{{i.logged_on_t}}</td>
          </tr>
