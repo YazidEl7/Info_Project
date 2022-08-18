@@ -50,7 +50,7 @@ def db_init():
     PRIMARY KEY("Id" AUTOINCREMENT), 
     FOREIGN KEY("Comp_Track") REFERENCES Computers (Id) ON DELETE CASCADE, 
     FOREIGN KEY("User_Track") REFERENCES Users (Id), 
-    FOREIGN KEY("IP_Track") REFERENCES IPees (Id)''')
+    FOREIGN KEY("IP_Track") REFERENCES IPees (Id))''')
     conn.close()
 
 
