@@ -133,7 +133,7 @@ def db_insert(client_instance, received_ltc, directory, os):
                   (comp_id, user_id, ip_id, ip_id, updated_on))
     conn_db.commit()
     curse.execute(''' INSERT INTO Track(Comp_Track,User_Track,IP_Track,Logged_On_Track) 
-    VALUES(?,?,?,?,?) ''', (comp_id, user_id, ip_id, updated_on))
+    VALUES(?,?,?,?) ''', (comp_id, user_id, ip_id, updated_on))
     conn_db.commit()
     print(f"user id {user_id}")
     # Closing Connection to DataBase
