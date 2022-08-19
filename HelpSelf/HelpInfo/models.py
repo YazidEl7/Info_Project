@@ -11,7 +11,13 @@ from django.db import models
 class Computers(models.Model):
     id = models.AutoField(db_column='Id', unique=True, primary_key=True)
     bios_serial = models.TextField(db_column='BIOS_Serial', unique=True, blank=True, null=True)
-    comp_name = models.TextField(db_column='Comp_Name', unique=True, blank=True, null=True)
+    comp_name = models.TextField(db_column='Comp_Name', blank=True, null=True)
+    last_timecreated = models.TextField(db_column='Last_TimeCreated', blank=True, null=True)
+    csvLog = models.BinaryField()
+    system = models.TextField(db_column='System', blank=True, null=True)
+    release = models.TextField(db_column='Release', blank=True, null=True)
+    version = models.TextField(db_column='Version', blank=True, null=True)
+    machine = models.TextField(db_column='Machine', blank=True, null=True)
 
     class Meta:
         managed = False
@@ -60,9 +66,6 @@ class Track(models.Model):
     user_t = models.ForeignKey(Users, models.DO_NOTHING, db_column='User_Track', blank=True, null=True)
     ip_t = models.ForeignKey(Ipees, models.DO_NOTHING, related_name='IP_track', db_column='IP_Track', blank=True,
                              null=True)
-    status_t = models.ForeignKey(Ipees, models.DO_NOTHING, related_name='Status_Track', db_column='Status_Track',
-                                 blank=True,
-                                 null=True)
     logged_on_t = models.TextField(db_column='Logged_On_track', blank=True, null=True)
 
     class Meta:
