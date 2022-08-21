@@ -10,14 +10,22 @@
 
             <th class="data-header">IP</th>
             <th class="data-header">LastSync</th>
+            <th class="data-header">System</th>
+            <th class="data-header">release</th>
+            <th class="data-header">version</th>
+            <th class="data-header">machine</th>
          </tr>
          {% for i in Computers %}
-            <tr class="data-line" id="investigate" onclick="window.location.href = '/U_H/{{i.user_t.user}}';">
+            <tr class="data-line">
                 <td class="data-data">{{i.comp_t.comp_name}}</td>
-                <td class="data-data">{{i.user_t.user}}</td>
+                <td class="data-data" id="investigate" onclick="window.open('/U_H/{{i.user_t.user}}')">{{i.user_t.user}}</td>
 
                 <td class="data-data">{{i.ip_t.ip}}</td>
                 <td class="data-data">{{i.logged_on_t}}</td>
+                <td class="data-data">{{i.comp_t.system}}</td>
+                <td class="data-data">{{i.comp_t.release}}</td>
+                <td class="data-data">{{i.comp_t.version}}</td>
+                <td class="data-data">{{i.comp_t.machine}}</td>
          </tr>
          {% endfor %}
      </table>

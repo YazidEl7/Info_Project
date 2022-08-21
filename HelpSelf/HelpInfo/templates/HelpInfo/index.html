@@ -8,7 +8,7 @@
 
     <title>HelpDesk Info</title>
 </head>
-<body>
+<body onload="startTime()">
     <header>
         <h1>info</h1>
     </header>
@@ -19,7 +19,27 @@
                 <button type="submit">&#x1F50E;</button>
             </form>
         </div>
+        <br>
+
+        <script>
+            function startTime() {
+                const today = new Date();
+                let h = today.getHours();
+                let m = today.getMinutes();
+                let s = today.getSeconds();
+                m = checkTime(m);
+                s = checkTime(s);
+                document.getElementById('txt').innerHTML = "<b>" + h + ":" + m + ":" + s + "</b>";
+                setTimeout(startTime, 1000);
+            }
+
+            function checkTime(i) {
+                if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
+            return i;
+            }
+        </script>
         <div class="Out" >
+            <div id="txt"></div>
             <button onclick="window.location.href = {% url 'logout' %};">User : {{ user.username }} | Log Out</button>
         </div>
         <hr class="new1">

@@ -1,7 +1,13 @@
 {% extends "HelpInfo/index.html" %}
 
 {% block content %}
-
+     <div class="search-container">
+         <form action="{% url 'LKE' %}" method="get">
+              <input type="text" placeholder="Search Below.." name="search">
+              <button type="submit">&#x1F50E;</button>
+         </form>
+     </div>
+    <br>
     <div style="overflow-x: auto;">
     <table class="data">
         <tr class="data-line">
@@ -13,8 +19,8 @@
             <th class="data-header">LocalSessionManager</th>
          </tr>
             {% for i in Computers %}
-         <tr class="data-line" id="investigate" onclick="window.location.href = '/C_H/{{i.comp.comp_name}}';">
-            <td class="data-data">{{i.comp.comp_name}}</td>
+         <tr class="data-line">
+            <td class="data-data" id="investigate" onclick="window.open('/C_H/{{i.comp.comp_name}}')">{{i.comp.comp_name}}</td>
             <td class="data-data">{{i.user.user}}</td>
                 {% if i.status.status == 1 %}
                     <td class="data-data"><ul><li class="status green"></li></ul></td>
@@ -23,8 +29,9 @@
                 {% endif %}
             <td class="data-data">{{i.ip.ip}}</td>
             <td class="data-data">{{i.logged_on}}</td>
-             <td class="data-data">still testing</td>
+             <td class="data-data" id="c_log" onclick="window.location.href = '/LSM/{{i.comp.bios_serial}}';">{{i.comp.bios_serial}} 's log</td>
          </tr>
+
             {% endfor %}
      </table>
 

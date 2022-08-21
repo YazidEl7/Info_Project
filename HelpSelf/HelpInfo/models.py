@@ -13,7 +13,7 @@ class Computers(models.Model):
     bios_serial = models.TextField(db_column='BIOS_Serial', unique=True, blank=True, null=True)
     comp_name = models.TextField(db_column='Comp_Name', blank=True, null=True)
     last_timecreated = models.TextField(db_column='Last_TimeCreated', blank=True, null=True)
-    csvLog = models.BinaryField()
+    csvlog = models.BinaryField(db_column='Csv_Log')
     system = models.TextField(db_column='System', blank=True, null=True)
     release = models.TextField(db_column='Release', blank=True, null=True)
     version = models.TextField(db_column='Version', blank=True, null=True)
@@ -46,8 +46,7 @@ class Users(models.Model):
 
 class Info(models.Model):
     id = models.AutoField(db_column='Id', unique=True, primary_key=True)
-    comp = models.ForeignKey(Computers, models.DO_NOTHING, db_column='Comp_Id', blank=True,
-                             null=True)
+    comp = models.ForeignKey(Computers, models.DO_NOTHING, db_column='Comp_Id', blank=True, null=True)
     user = models.ForeignKey(Users, models.DO_NOTHING, db_column='User_Id', blank=True, null=True)
     ip = models.ForeignKey(Ipees, models.DO_NOTHING, related_name='IP_Id', db_column='IP_Id', blank=True, null=True)
     status = models.ForeignKey(Ipees, models.DO_NOTHING, related_name='Status_Id', db_column='Status_Id', blank=True,

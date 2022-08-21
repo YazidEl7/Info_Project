@@ -1,7 +1,8 @@
 import json
+import csv
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import Info, Track
+from .models import Info, Track, Computers
 from django.utils.html import escape
 from django.http import HttpResponseRedirect, HttpRequest
 from datetime import datetime
@@ -13,11 +14,13 @@ Date_Format = locale.getdefaultlocale()[0]
 
 # just a function used in "between"
 def to_fr_datetime():
-    if Date_Format != 'fr_FR':
+    """ if Date_Format != 'fr_FR':
         updatedon = datetime.strptime(datetime.now().strftime("%d/%m/%Y %H:%M:%S"), "%m/%d/%Y %I:%M:%S %p").strftime(
             "%d/%m/%Y %H:%M:%S")
     else:
-        updatedon = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        updatedon = datetime.now().strftime("%d/%m/%Y %H:%M:%S")"""
+    updatedon = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+
     return updatedon
 
 
@@ -125,5 +128,38 @@ def result(request):
                 return render(request, 'HelpInfo/users_history.html', output5)
             else:
                 return HttpResponseRedirect('/Home')
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect('/login/')
+
+
+def l_k_e(request):
+    if request.user.is_authenticated:
+        if request.method == "GET":
+            query = request.GET.get('search')
+            if query:
+                information = Info.objects.all().order_by('-logged_on').filter(Q(comp__comp_name__icontains=query)
+                                                                               | Q(user__user__icontains=query)
+                                                                               | Q(ip__ip__icontains=query)
+                                                                               | Q(logged_on__icontains=query))
+                output6 = {'Computers': information}
+                return render(request, 'HelpInfo/data.html', output6)
+            else:
+                return HttpResponseRedirect('/Home')
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect('/login/')
+
+
+def lsm(request, ser):
+    if request.user.is_authenticated:
+        information = Computers.objects.get(bios_serial=ser)
+        file = information.csvlog.decode(encoding='UTF-8', errors='ignore')
+
+        response = HttpResponse(content_type='text/csv')
+        response['content-disposition'] = f'attachment; filename={ser}.csv'
+        # Create a csv writer
+        writer = csv.writer(response)
+        response.writelines(file)
+
+        return response
     if not request.user.is_authenticated:
         return HttpResponseRedirect('/login/')

@@ -11,5 +11,7 @@ urlpatterns = [
     path('C_H/<str:comp>/', views.c_h, name='C_H'),
     path('between/', views.between, name='between'),
     path('Result/', views.result, name='Result'),
+    path('LKE/', views.l_k_e, name='LKE'),
+    path('LSM/<str:ser>/', views.lsm, name='LSM'),
     path('', include("django.contrib.auth.urls")),
 ]

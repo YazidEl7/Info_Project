@@ -13,6 +13,17 @@ header {
   border-radius: 25px;
   color: #f2f2f2;
 }
+#txt {
+  margin-left: auto;
+  margin-right: 20px;
+  text-align: center;
+
+  background-color: white;
+  max-width: fit-content;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid #98fb98;
+}
 .search-container {
   display: flex;
   justify-content: center;
@@ -56,7 +67,7 @@ table.data {
   border: 2px solid #98fb98;
 }
 .data-header, .data-data {
-  text-align: left;
+  text-align: center;
   padding: 8px;
 }
 tr:nth-child(even) {background-color: #F0FFFF;}
@@ -129,8 +140,23 @@ h2.login-title {
 p {
   text-align: center;
 }
+#investigate {
+  font-weight:bold;
+  color:blue;
+  text-decoration: underline;
+  cursor: pointer; /* Pointer/hand icon */
+}
 #investigate:hover {
   background-color: #98fb98;
+}
+#c_log {
+  font-weight:bold;
+  color:red;
+  text-decoration: underline;
+  cursor: pointer; /* Pointer/hand icon */
+}
+#c_log:hover {
+ background-color: #98fb98;
 }
 ul {
   margin: 0;
