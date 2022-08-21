@@ -216,14 +216,14 @@ def db_update(client_instance, c1, cl, received_ltc, directory, appended, os_r, 
     f4, c4, cl = db_search(c1, 4)
     if f4 == 1:
         curse.execute(''' INSERT INTO Track(Comp_Track,User_Track,IP_Track,Logged_On_Track) 
-        VALUES(?,?,?,?,?) ''', (c1, c3, c2, updated_on))
+        VALUES(?,?,?,?) ''', (c1, c3, c2, updated_on))
         conn_db.commit()
         curse.execute('''Update Info SET Comp_Id = ?, User_Id = ?, IP_Id = ?, Status_Id = ? , Logged_On = ? 
         WHERE id = ?''', (c1, c3, c2, c2, updated_on, c4))
         conn_db.commit()
     else:
         curse.execute(''' INSERT INTO Track(Comp_Track,User_Track,IP_Track,Logged_On_Track) 
-        VALUES(?,?,?,?,?) ''', (c1, c3, c2, updated_on))
+        VALUES(?,?,?,?) ''', (c1, c3, c2, updated_on))
         conn_db.commit()
         curse.execute(''' INSERT INTO Info(Comp_Id,User_Id,IP_Id,Status_Id,Logged_On) VALUES(?,?,?,?,?) ''',
                       (c1, c3, c2, c2, updated_on))
