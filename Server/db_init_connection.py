@@ -2,7 +2,6 @@ import sqlite3
 from datetime import datetime
 import locale
 
-
 # database name : comp-info.sqlite, contains 5 tables
 # Tables : IPees, Computers, Users, Info, Track
 # IPees fields : IP, Status(up\down)
@@ -14,10 +13,13 @@ Date_Format = locale.getdefaultlocale()[0]
 
 
 def to_fr_datetime():
-    if Date_Format != 'fr_FR':
-        updatedon = datetime.strptime(datetime.now().strftime("%d/%m/%Y %H:%M:%S"), "%m/%d/%Y %I:%M:%S %p").strftime("%d/%m/%Y %H:%M:%S")
+    """ if Date_Format != 'fr_FR':
+        updatedon = datetime.strptime(datetime.now().strftime("%d/%m/%Y %H:%M:%S"), "%m/%d/%Y %I:%M:%S %p").strftime(
+            "%d/%m/%Y %H:%M:%S")
     else:
-        updatedon = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        updatedon = datetime.now().strftime("%d/%m/%Y %H:%M:%S")"""
+    updatedon = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+
     return updatedon
 
 
@@ -109,10 +111,10 @@ def db_update_status():
 
 
 def db_insert(client_instance, received_ltc, directory, os):
-    # Connecting to DataBase
-    curse, conn_db = db_conn()
     path = directory + "/LOGS/" + client_instance.biosserial + ".csv"
     b_data = convert_to_binary(path)
+    # Connecting to DataBase
+    curse, conn_db = db_conn()
     # not registered before 2
     #   inserting data
     curse.execute(''' INSERT INTO Computers(BIOS_Serial,Comp_Name,Last_TimeCreated,Csv_Log,System,Release,
@@ -135,18 +137,18 @@ def db_insert(client_instance, received_ltc, directory, os):
     curse.execute(''' INSERT INTO Track(Comp_Track,User_Track,IP_Track,Logged_On_Track) 
     VALUES(?,?,?,?) ''', (comp_id, user_id, ip_id, updated_on))
     conn_db.commit()
-    print(f"user id {user_id}")
     # Closing Connection to DataBase
     db_close_conn(conn_db)
+    print(f"user id {user_id}")
 
 
 def db_search(to_be_searched, choice):
-    # Connecting to DataBase
-    curse, conn_db = db_conn()
     # checking whether the computer is already registered
     check = ''
     checkl = ''
     found = 0
+    # Connecting to DataBase
+    curse, conn_db = db_conn()
     try:
         # if choice == 1:
         # curse.execute('''SELECT Id, Comp_Name FROM Computers WHERE BIOS_Serial = ?''', (to_be_searched,))
@@ -169,10 +171,11 @@ def db_search(to_be_searched, choice):
 
 
 def db_update(client_instance, c1, cl, received_ltc, directory, appended, os_r, os):
-    # Connecting to DataBase
-    curse, conn_db = db_conn()
+
     path = directory + "/LOGS/" + client_instance.biosserial + ".csv"
     b_data = convert_to_binary(path)
+    # Connecting to DataBase
+    curse, conn_db = db_conn()
 
     curse.execute('''UPDATE Computers SET Last_TimeCreated = ? WHERE Id = ?''', (received_ltc, c1))
     conn_db.commit()
