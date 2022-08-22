@@ -149,7 +149,13 @@ def logfile(tc):
 def hour_plus_one():
     v = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S").split(' ')
     vv = v[1].split(':')
-    vv = str(int(vv[0]) + 2) + ":" + vv[1] + ":" + vv[2]
+    c = int(vv[0])
+    if c == 22:
+        vv = "00" + ":" + vv[1] + ":" + vv[2]
+    elif c==23:
+        vv = "01" + ":" + vv[1] + ":" + vv[2]
+    else:
+        vv = str(int(vv[0]) + 2) + ":" + vv[1] + ":" + vv[2]
     v = v[0] + " " + vv
     if Date_Format == 'fr_FR':
         co = parser.parse(v, dayfirst=True)
