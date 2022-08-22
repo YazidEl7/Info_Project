@@ -14,6 +14,7 @@
             <th class="data-header">release</th>
             <th class="data-header">version</th>
             <th class="data-header">machine</th>
+            <th class="data-header">BIOS_SN</th>
          </tr>
          {% for i in Computers %}
             <tr class="data-line">
@@ -26,6 +27,7 @@
                 <td class="data-data">{{i.comp_t.release}}</td>
                 <td class="data-data">{{i.comp_t.version}}</td>
                 <td class="data-data">{{i.comp_t.machine}}</td>
+                <td class="data-data">{{i.comp_t.bios_serial}}</td>
          </tr>
          {% endfor %}
      </table>

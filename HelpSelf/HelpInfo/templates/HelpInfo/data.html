@@ -17,9 +17,9 @@
             <th class="data-header">IP</th>
             <th class="data-header">LastSync</th>
             <th class="data-header">LocalSessionManager</th>
-         </tr>
+        </tr>
             {% for i in Computers %}
-         <tr class="data-line">
+        <tr class="data-line">
             <td class="data-data" id="investigate" onclick="window.open('/C_H/{{i.comp.comp_name}}')">{{i.comp.comp_name}}</td>
             <td class="data-data">{{i.user.user}}</td>
                 {% if i.status.status == 1 %}
@@ -30,10 +30,10 @@
             <td class="data-data">{{i.ip.ip}}</td>
             <td class="data-data">{{i.logged_on}}</td>
              <td class="data-data" id="c_log" onclick="window.location.href = '/LSM/{{i.comp.bios_serial}}';">{{i.comp.bios_serial}} 's log</td>
-         </tr>
+        </tr>
 
             {% endfor %}
-     </table>
+    </table>
 
     </div>
 
