@@ -139,16 +139,16 @@ def db_insert(client_instance, received_ltc, directory, os):
     conn_db.commit()
     # Closing Connection to DataBase
     db_close_conn(conn_db)
-    print(f"user id {user_id}")
+    # print(f"user id {user_id}")
 
 
-def db_search(to_be_searched, choice):
+def db_search(curse, to_be_searched, choice):
     # checking whether the computer is already registered
     check = ''
     checkl = ''
     found = 0
     # Connecting to DataBase
-    curse, conn_db = db_conn()
+    # curse, conn_db = db_conn()
     try:
         # if choice == 1:
         # curse.execute('''SELECT Id, Comp_Name FROM Computers WHERE BIOS_Serial = ?''', (to_be_searched,))
@@ -166,21 +166,19 @@ def db_search(to_be_searched, choice):
     except:
         found = 0
     # Closing Connection to DataBase
-    db_close_conn(conn_db)
+    # db_close_conn(conn_db)
     return found, check, checkl
 
 
 def db_update(client_instance, c1, cl, received_ltc, directory, appended, os_r, os):
-
-    path = directory + "/LOGS/" + client_instance.biosserial + ".csv"
-    b_data = convert_to_binary(path)
     # Connecting to DataBase
     curse, conn_db = db_conn()
 
-    curse.execute('''UPDATE Computers SET Last_TimeCreated = ? WHERE Id = ?''', (received_ltc, c1))
-    conn_db.commit()
-
     if appended == 1:
+        curse.execute('''UPDATE Computers SET Last_TimeCreated = ? WHERE Id = ?''', (received_ltc, c1))
+        conn_db.commit()
+        path = directory + "/LOGS/" + client_instance.biosserial + ".csv"
+        b_data = convert_to_binary(path)
         curse.execute('''UPDATE Computers SET Csv_Log = ? WHERE Id = ?''', (b_data, c1))
         conn_db.commit()
 
@@ -192,10 +190,11 @@ def db_update(client_instance, c1, cl, received_ltc, directory, appended, os_r, 
     # print(f"c1 : {c1} {type(c1)}, bios {client_instance.biosserial} {type(client_instance.biosserial)}")
     if cl != client_instance.computername:
         # print(f"this is cl {cl} {type(cl)} this is coming {client_instance.computername} c1 {c1} {type(c1)}")
+        # print(" Modifying ComputerName")
         curse.execute('''UPDATE Computers SET Comp_Name = ? WHERE Id = ?''', (client_instance.computername, c1))
         conn_db.commit()
 
-    f2, c2, cl = db_search(client_instance.address, 2)
+    f2, c2, cl = db_search(curse, client_instance.address, 2)
     if f2 == 1:
         curse.execute('''UPDATE IPees SET Status = 1 WHERE Id = ?''', (c2,))
         conn_db.commit()
@@ -205,7 +204,7 @@ def db_update(client_instance, c1, cl, received_ltc, directory, appended, os_r, 
         conn_db.commit()
         c2 = curse.lastrowid
 
-    f3, c3, cl = db_search(client_instance.username, 3)
+    f3, c3, cl = db_search(curse, client_instance.username, 3)
     if f3 != 1 or cl != client_instance.domain:
         curse.execute(''' INSERT INTO Users(User,Domain) VALUES(?,?) ''',
                       (client_instance.username, client_instance.domain))
@@ -213,7 +212,7 @@ def db_update(client_instance, c1, cl, received_ltc, directory, appended, os_r, 
         c3 = curse.lastrowid
     updated_on = to_fr_datetime()
 
-    f4, c4, cl = db_search(c1, 4)
+    f4, c4, cl = db_search(curse, c1, 4)
     if f4 == 1:
         curse.execute(''' INSERT INTO Track(Comp_Track,User_Track,IP_Track,Logged_On_Track) 
         VALUES(?,?,?,?) ''', (c1, c3, c2, updated_on))
