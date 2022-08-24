@@ -8,6 +8,7 @@ the 2nd part contains a Django app that’ll access that database and get data i
 **Might work on the below stuff l8r** : 
 - Still needs to be tested in restricting Environments (I tested it in a windows 10 PC with a standard user and it worked, but l8r when we pull logs too we'll have to test it again)
 - Getting ip from client doesn't always get the right interface ip.
+- Perhaps SQLite isn't the right one for this, might change l8r
 
  *Note* : Before utilization, port number if you want and create your own admin user on Django.
 
